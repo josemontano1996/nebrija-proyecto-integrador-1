@@ -1,0 +1,20 @@
+#footer {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+  justify-content: space-around;
+  flex-shrink: 0;
+}
+
+/* Configuration for making the footer always stick at the bottom, even in smaller pages*/
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}

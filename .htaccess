@@ -1,0 +1,9 @@
+<FilesMatch "\.(htaccess|htpasswd|ini|phps|fla|psd|log|sh|json)$">
+Order Allow,Deny
+Deny from all
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^.* index.php
+</IfModule>

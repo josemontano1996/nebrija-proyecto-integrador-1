@@ -1,0 +1,17 @@
+#side-menu {
+  position: fixed;
+  top: 2rem;
+  right: 0;
+  background-color: var(--background-primary);
+  padding: 3rem 2rem;
+  font-size: 1.5rem;
+  & h4 {
+    font-size: 2rem;
+  }
+  & ul li a {
+    padding: 0.3rem 0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
