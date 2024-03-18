@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Classes\Cart\CartCookie;
@@ -8,8 +10,8 @@ use mysqli_result;
 
 class CartModel
 {
-    protected string $user_id;
-    protected array $items;
+    private string $user_id;
+    private array $items;
 
     public function __construct(string $user_id,  CartCookie $items)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Checks if a string is valid based on the given minimum length.
  *

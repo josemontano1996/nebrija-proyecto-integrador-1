@@ -1,17 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 require_once ROOT_PATH . '/src/lib/validation.php';
 
 use App\View;
-use App\DB;
 use App\Models\UserModel;
-use App\Models\ProductModel as Product;
-use App\Models\CartModel;
-use App\Classes\Cart\Cart;
-use App\Classes\Cart\CartCookie;
-
 
 /**
  * The AuthController class handles user authentication and registration.
@@ -69,13 +65,9 @@ class AuthController
 
         try {
 
-            $dbInstance = DB::getInstance();
-            $db = $dbInstance->getDb();
-
             $userInstance = new UserModel($email, $password);
-            $user = $userInstance->login($db);
+            $user = $userInstance->login();
 
-            $db->close();
 
             if ($user) {
                 $_SESSION['user']['id'] = $user['id'];
@@ -147,8 +139,8 @@ class AuthController
         try {
 
           
-            $user = new UserModel($email, $password, $username);
-            $result = $user->register();
+            $userInstance = new UserModel($email, $password, $username);
+            $result = $userInstance->register();
 
             if (!$result) {
                 $_SESSION['error'] = 'An error occurred';

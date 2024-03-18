@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DAO;
 
 use App\DB;
@@ -101,7 +103,7 @@ class ProductDAO
         $statement = $db->prepare($query);
 
         if (!$statement) {
-            return false;
+            return null;
         }
 
         $statement->bind_param('s', $productId);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Classes\Cart\Cart;
@@ -18,7 +20,7 @@ class CartController
      *
      * @return string The rendered cart view.
      */
-    public function getCart()
+    public function getCart(): ?string
     {
         try {
             $cookieCart = new CartCookie();
@@ -47,7 +49,6 @@ class CartController
             }
 
             return (new View('cart', ['products' => $cartProducts, 'totalPrice' => $totalPrice]))->render();
-            
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error while loading the cart. Please try again later.';
             http_response_code(500);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 require_once __DIR__ . '/../../const/consts.php';
@@ -47,7 +49,7 @@ class ProductModel extends Product
     {
         $productDAO = new ProductDAO();
 
-        $result = $productDAO->updateProduct($this->id, $this->name, $this->description, $this->min_servings, $this->price, $this->type, $this->image_url);
+        $result = $productDAO->updateProduct($this->id = '', $this->name, $this->description, $this->min_servings, $this->price, $this->type, $this->image_url);
 
         return $result;
     }

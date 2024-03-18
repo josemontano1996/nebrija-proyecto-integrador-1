@@ -9,18 +9,17 @@ require_once __DIR__ .  '/../../../const/consts.php';
 require_once __DIR__ .  '/../../../lib/data-validation.php';
 
 use App\View;
-use App\Models\ProductModel ;
+use App\Models\ProductModel;
 
 class AdminMenuController
 {
-    public function getMenu(): string
+    public function getMenu(): ?string
     {
         try {
 
             $products = ProductModel::getAllByType();
 
             return (new View('admin/menu/adminMenu', $products))->render();
-
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error while loading the menu. Please try again later.';
             http_response_code(500);
@@ -28,7 +27,7 @@ class AdminMenuController
         }
     }
 
-    public function getUpdateProduct(): string
+    public function getUpdateProduct(): ?string
     {
         try {
             $productId = $_GET['productId'];
@@ -42,7 +41,6 @@ class AdminMenuController
             }
 
             return (new View('admin/product/update', $product))->render();
-            
         } catch (\Exception $e) {
             $_SESSION['error'] = $e;
             http_response_code(500);
@@ -50,7 +48,7 @@ class AdminMenuController
         }
     }
 
-    public function postUpdateProduct()
+    public function postUpdateProduct(): void
     {
         $id =  $_POST['id'];
         $name = trim($_POST['name']);
@@ -59,7 +57,8 @@ class AdminMenuController
         $price = (float) $_POST['price'];
         $type = $_POST['type'];
         $old_image_url = $_POST['old_image_url'];
-        $new_image = ($_FILES['new_image']['size'] > 0) ? $_FILES['new_image'] : null;;
+        $new_image = ($_FILES['new_image']['size'] > 0) ? $_FILES['new_image'] : null;
+        
         $isInvalidData = isInvalidProductData($name, $description, $min_servings, $price, $type, $new_image);
 
         if ($isInvalidData) {
@@ -78,9 +77,15 @@ class AdminMenuController
 
         try {
 
-            $product = new ProductModel($name, $description, $price, $type, $new_image_url, $min_servings, $id);
+            $productInstance = new ProductModel($name, $description, $price, $type, $new_image_url, $min_servings, $id);
 
-            $product->update();
+            $success = $productInstance->update();
+
+            if (!$success) {
+                http_response_code(500);
+                echo json_encode("Error while updating the product.");
+                exit();
+            }
 
             echo json_encode('/admin/menu');
             exit();
@@ -107,7 +112,7 @@ class AdminMenuController
         return (new View('admin/product/new'))->render();
     }
 
-    public function postNewProduct()
+    public function postNewProduct(): void
     {
 
         $name = trim($_POST['name']);
@@ -128,9 +133,15 @@ class AdminMenuController
         $image_url = uploadImage($image);
 
         try {
-            $product = new ProductModel($name, $description, $price, $type, $image_url, $min_servings);
+            $productInstance = new ProductModel($name, $description, $price, $type, $image_url, $min_servings);
 
-            $product->add();
+            $success = $productInstance->add();
+
+            if (!$success) {
+                http_response_code(500);
+                echo json_encode("Error while adding the product.");
+                exit();
+            }
 
             echo json_encode('/admin/menu');
             exit();
@@ -153,24 +164,24 @@ class AdminMenuController
 
     public function deleteProduct(): void
     {
-        $product_id = $_GET['productId'];
-
-        //decoding the url parameter for image url
-        $image_url = urldecode($_GET['imageUrl']);
-
-        $isDeleted = ProductModel::delete($product_id);
-
-        if ($isDeleted) {
-            unlink(ROOT_PATH . $image_url);
-        } else {
-            echo json_encode("Error while deleting.");
-            exit();
-        }
-
-
-        echo json_encode("Success deleting the product.");
-        exit();
         try {
+            $product_id = $_GET['productId'];
+
+            //decoding the url parameter for image url
+            $image_url = urldecode($_GET['imageUrl']);
+
+            $isDeleted = ProductModel::delete($product_id);
+
+            if ($isDeleted) {
+                unlink(ROOT_PATH . $image_url);
+            } else {
+                echo json_encode("Error while deleting.");
+                exit();
+            }
+
+
+            echo json_encode("Success deleting the product.");
+            exit();
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode("Something went wrong");

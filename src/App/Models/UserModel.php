@@ -7,9 +7,6 @@ namespace App\Models;
 use App\Classes\DeliveryData;
 use App\Classes\User;
 use App\DAO\UserDAO;
-use App\DB;
-use mysqli;
-use mysqli_result;
 
 /**
  * Class UserModel
@@ -43,7 +40,7 @@ class UserModel extends User
     /**
      * Registers the user in the database.
      *
-     * @return mysqli_result|null Returns true if the user is successfully registered, false otherwise.
+     * @return bool Returns true if the user is successfully registered, false otherwise.
      */
     public function register(): bool
     {
@@ -62,7 +59,7 @@ class UserModel extends User
     {
         // Retrieve user data from the database
         $userDAO = new UserDAO();
-        $userData = $userDAO->getUserByEmail($this->email, $this->password);
+        $userData = $userDAO->getUserByEmail($this->email);
 
         if (!$userData) {
             return null;
