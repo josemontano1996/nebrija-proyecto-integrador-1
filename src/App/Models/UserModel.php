@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Classes\DeliveryData;
-use App\Classes\User;
+use App\Models\Abstract\DeliveryData;
+use App\Models\Abstract\User;
 use App\DAO\UserDAO;
 
 /**

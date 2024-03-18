@@ -43,6 +43,11 @@ class ProductDAO
 
         $products = $result->fetch_all(MYSQLI_ASSOC);
 
+        foreach ($products as $key => $product) {
+            $products[$key]['price'] = (float) $product['price'];
+            $products[$key]['min_servings'] = (int) $product['min_servings'];
+        }
+
         return $products;
     }
 
@@ -120,6 +125,9 @@ class ProductDAO
         $result->close();
         $statement->close();
 
+        $product['price'] = (float) $product['price'];
+        $product['min_servings'] = (int) $product['min_servings'];
+
         return $product;
     }
 
@@ -182,6 +190,11 @@ class ProductDAO
 
         $result = $db->query($query);
         $products = $result->fetch_all(MYSQLI_ASSOC);
+
+        foreach ($products as $key => $product) {
+            $products[$key]['price'] = (float) $product['price'];
+            $products[$key]['min_servings'] = (int) $product['min_servings'];
+        }
 
         $productNotFound = count($products) !== count($ids);
 

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Classes;
+namespace App\Models\Abstract;
+
 
 use App\Models\Abstract\DeliveryData;
 

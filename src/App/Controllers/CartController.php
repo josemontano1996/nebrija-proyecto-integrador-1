@@ -23,24 +23,11 @@ class CartController
     public function getCart(): ?string
     {
         try {
-            $cookieCart = new CartCookie();
-
-            // Get the ids of the products in the cart
-            $id_list = $cookieCart->fetchIds();
-
-            if (count($id_list) === 0) {
-                $_SESSION['error'] = 'Your cart is empty, add some items to it first.';
-                http_response_code(500);
-                header('Location: /menu');
-                exit();
-            }
-
-            [$products, $notFoundProduct] = Product::getProductsByIds($id_list);
-
-            $cart = new CartDataInitializer($products, $cookieCart);
+            $cart = new CartDataInitializer();
 
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();
+            $notFoundProduct = $cart->getNotFoundProduct();
 
             if ($notFoundProduct) {
                 $cartCookie = new CartCookie($cart);

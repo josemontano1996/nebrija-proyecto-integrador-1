@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Models\Abstract;
+
 
 /**
  * The DeliveryData class is an abstract class that represents delivery data.

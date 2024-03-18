@@ -58,7 +58,7 @@ class CartCookie
      *
      * @return array The array of product IDs.
      */
-    public function fetchIds(): array
+    public function getIds(): array
     {
         $ids = [];
         foreach ($this->cart as $item) {
@@ -75,6 +75,16 @@ class CartCookie
     public function getCart(): array
     {
         return $this->cart;
+    }
+
+    public function getIndex(int $index): array
+    {
+        return $this->cart[$index];
+    }
+
+    public function getArrayLength(): int
+    {
+        return count($this->cart);
     }
 
     /**
