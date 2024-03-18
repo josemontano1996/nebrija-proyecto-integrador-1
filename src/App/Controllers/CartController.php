@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Models\Cart\CartCookie;
 use App\Models\Cart\CartDataInitializer;
 use App\View;
-use App\Models\ProductModel as Product;
 
 /**
  * The CartController class is responsible for handling the main cart functionalities of the application.
@@ -27,13 +26,6 @@ class CartController
 
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();
-            $notFoundProduct = $cart->getNotFoundProduct();
-
-            if ($notFoundProduct) {
-                $cartCookie = new CartCookie($cart);
-                $cartCookie->saveCart();
-                $_SESSION['error'] = 'Some of your cart products were modified or deleted, your cart has been updated.';
-            }
 
             return (new View('cart', ['products' => $cartProducts, 'totalPrice' => $totalPrice]))->render();
         } catch (\Exception $e) {

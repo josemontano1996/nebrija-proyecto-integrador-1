@@ -8,8 +8,11 @@ use App\Models\ProductModel;
 
 /**
  * Class CartDataInitializer
- * Represents a shopping cart data initializer.
+ * Prepares the cart data for display, including merging cookie data with fetched products and calculating totals.
+ * For working with the cart cookie use CartCookie.
+ * For making database operation use  CartDb .
  */
+
 class CartDataInitializer
 {
     private array $products = [];
@@ -32,6 +35,7 @@ class CartDataInitializer
      */
     public function initializeCartData(): void
     {
+        // Get the cart from the cookie
         $cookieCart = new CartCookie();
 
         $cookieCartData = $cookieCart->getCart();
@@ -39,6 +43,7 @@ class CartDataInitializer
         // Get the ids of the products in the cart
         $id_list = $cookieCart->getIds();
 
+        // If the cart is empty, redirect to the menu page
         if (count($id_list) === 0) {
             $_SESSION['error'] = 'Your cart is empty, add some items to it first.';
             http_response_code(500);
@@ -46,6 +51,7 @@ class CartDataInitializer
             exit();
         }
 
+        // Get the products from the database
         [$fetchedProducts, $notFoundProduct] = ProductModel::getProductsByIds($id_list);
 
         $this->notFoundProduct = $notFoundProduct;
@@ -53,6 +59,14 @@ class CartDataInitializer
         $mergedProducts = $this->mergeProducts($fetchedProducts, $cookieCartData);
 
         $this->products = $mergedProducts;
+
+
+        if ($notFoundProduct) {
+            $cartCookie = new CartCookie($this);
+            $cartCookie->saveCart();
+
+            $_SESSION['error'] = 'Some of your cart products were modified or deleted, your cart has been updated.';
+        }
     }
 
     private function mergeProducts(array $fetchedProducts, array $cookieCartData): array
@@ -73,7 +87,7 @@ class CartDataInitializer
                     $products[] = new CartProductData($product['id'], $product['name'], $cookieItem['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
                     $found = true;
                 }
-                
+
                 $index++;
             } while (!$found && $index < count($cookieCartData));
         }
