@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Classes\Cart;
-
-use App\Classes\Cart\CartItem;
-use App\Classes\Cart\CartCookie;
+namespace App\Models\Cart;
 
 /**
  * Class Cart
  * Represents a shopping cart, only for display and parsing purposes.
  * For working with the cart cookie or saving the cart in the DB use the CartCookie class.
  */
-class Cart
+class CartDataInitializer
 {
     protected array $products = [];
     protected float $totalPrice = 0;
@@ -54,7 +51,7 @@ class Cart
             } while (!$found && $index < count($cookieCartData));
 
             if ($found) {
-                $this->products[] = new CartItem($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
+                $this->products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
             }
         }
     }
@@ -70,7 +67,7 @@ class Cart
             $totalPrice += $product->getPrice() * $product->getQuantity();
         }
 
-        $this->totalPrice = number_format($totalPrice, 2, '.', '');
+        $this->totalPrice = (float) number_format($totalPrice, 2, '.', '');
     }
 
     /**

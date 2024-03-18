@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Models\Cart;
 
-use App\Classes\Cart\CartCookie;
 use App\DB;
+use App\Models\Cart\CartCookie;
 use mysqli_result;
 
-class CartModel
+class CartDb
 {
     private string $user_id;
     private array $items;

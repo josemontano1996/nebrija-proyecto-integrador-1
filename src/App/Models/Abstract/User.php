@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Classes;
 
-use App\Classes\DeliveryData;
+use App\Models\Abstract\DeliveryData;
 
 /**
  * The User class represents a user in the system.

@@ -6,8 +6,9 @@ namespace App\Models;
 
 require_once __DIR__ . '/../../const/consts.php';
 
-use App\Classes\Product;
+
 use App\DAO\ProductDAO;
+use App\Models\Abstract\Product;
 
 /**
  * Class ProductModel

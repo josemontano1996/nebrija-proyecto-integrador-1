@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Classes\Cart\Cart;
-use App\Classes\Cart\CartCookie;
+use App\Models\Cart\CartCookie;
+use App\Models\Cart\CartDataInitializer;
 use App\View;
 use App\Models\ProductModel as Product;
 
@@ -37,7 +37,7 @@ class CartController
 
             [$products, $notFoundProduct] = Product::getProductsByIds($id_list);
 
-            $cart = new Cart($products, $cookieCart);
+            $cart = new CartDataInitializer($products, $cookieCart);
 
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Classes\Cart;
-
-use App\Classes\Cart\Cart;
+namespace App\Models\Cart;
 
 /**
  * Class CartCookie
@@ -13,18 +11,21 @@ use App\Classes\Cart\Cart;
  */
 class CartCookie
 {
+
+    /**
+     * @var array<array<'id'=>string, 'quantity'=>int>> $cart The cart data.
+     */
     private array $cart = [];
+
 
     /**
      * CartCookie constructor.
-     * 
-     * Initializes a new instance of the CartCookie class.
-     * If a Cart object is provided, it retrieves the products from the cart and stores them in the cookie.
-     * If no Cart object is provided, it retrieves the cart data from the cookie.
      *
-     * @param Cart|null $cart The Cart object to retrieve the products from.
+     * @param CartDataInitializer|null $cart The cart data initializer.
+     * if null, the cart will be fetched from the cookie.
+     * if not null, the cart will be initialized from the cart data initializer.
      */
-    public function __construct(?Cart $cart = null) 
+    public function __construct(?CartDataInitializer $cart = null)
     {
         if ($cart !== null) {
             $cartData = $cart->getProducts();
@@ -43,6 +44,8 @@ class CartCookie
 
     /**
      * Saves the cart data to a cookie.
+     *
+     * @return void
      */
     public function saveCart(): void
     {
