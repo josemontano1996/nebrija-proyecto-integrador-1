@@ -7,6 +7,7 @@ namespace App\DAO;
 use App\DB;
 use mysqli;
 use Ramsey\Uuid\Uuid;
+use App\Models\Classes\Product;
 
 /**
  * Class ProductDAO
@@ -177,7 +178,7 @@ class ProductDAO
      * 
      * @param array $ids An array of product IDs.
      * 
-     * @return array An array of products and a flag indicating if any product was not found.
+     * @return [ ?Product[], bool ] : An array containing the products and a boolean indicating if any product was not found.
      */
     public function getProductsByIds(array $ids): array
     {
@@ -191,9 +192,9 @@ class ProductDAO
         $result = $db->query($query);
         $products = $result->fetch_all(MYSQLI_ASSOC);
 
+
         foreach ($products as $key => $product) {
-            $products[$key]['price'] = (float) $product['price'];
-            $products[$key]['min_servings'] = (int) $product['min_servings'];
+            $products[$key] = new Product($product['name'], $product['description'], (float)$product['price'], $product['type'], $product['image_url'], (int) $product['min_servings'], $product['id']);
         }
 
         $productNotFound = count($products) !== count($ids);

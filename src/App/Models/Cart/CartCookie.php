@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Cart;
 
+use App\Models\Classes\CartCookieItem;
+
 /**
  * Class CartCookie
  * 
@@ -13,7 +15,7 @@ class CartCookie
 {
 
     /**
-     * @var array<array<'id'=>string, 'quantity'=>int>> $cart The cart data.
+     * @var CartCookieItem[] $cart The cart data.
      */
     private array $cart = [];
 
@@ -31,10 +33,7 @@ class CartCookie
             $cartData = $cart->getProducts();
 
             foreach ($cartData as $product) {
-                $productData = [
-                    'id' => $product->getId(),
-                    'quantity' => $product->getQuantity()
-                ];
+                $productData = new CartCookieItem($product['id'], $product['quantity']);
                 $this->cart[] = $productData;
             }
         } else {
@@ -70,14 +69,14 @@ class CartCookie
     /**
      * Retrieves the cart data stored in the cookie.
      *
-     * @return array The cart data stored in the cookie.
+     * @return CartCookieItem[] The cart data stored in the cookie.
      */
     public function getCart(): array
     {
         return $this->cart;
     }
 
-    public function getIndex(int $index): array
+    public function getIndex(int $index): CartCookieItem
     {
         return $this->cart[$index];
     }

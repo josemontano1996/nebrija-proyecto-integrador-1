@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Cart;
 
-use App\Models\Abstract\Product;
+use App\Models\Classes\Product;
 
 /**
  * Class CartProductData

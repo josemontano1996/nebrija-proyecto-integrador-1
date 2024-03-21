@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../const/consts.php';
 
 
 use App\DAO\ProductDAO;
-use App\Models\Abstract\Product;
+use App\Models\Classes\Product;
 
 /**
  * Class ProductModel
@@ -58,10 +58,10 @@ class ProductModel extends Product
     /**
      * Retrieves multiple products by their IDs.
      *
-     * @param array $ids An array of product IDs.
-     * @return array An array containing the retrieved products and a flag indicating if any product was not found.
+     * @param array<string> $ids An array of product IDs.
+     * @return [ ?Product[], bool ] : An array containing the products and a boolean indicating if any product was not found.
      */
-    static public function getProductsByIds(array $ids): array
+    static public function getProductsByIds(array $ids):array
     {
 
         $productDAO = new ProductDAO();

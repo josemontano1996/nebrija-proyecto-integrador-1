@@ -3,12 +3,12 @@
 namespace App\Models\Abstract;
 
 
-use App\Models\Abstract\DeliveryData;
+use App\Models\Classes\DeliveryData;
 
 /**
  * The User class represents a user in the system.
  */
-abstract class User
+class User
 {
     /**
      * Create a new User instance.
@@ -20,7 +20,7 @@ abstract class User
      * @param string|null $id The user's ID (optional).
      * @param DeliveryData|null $delivery_data The user's delivery data (optional).
      */
-    protected function __construct(
+    public function __construct(
         protected string $email,
         protected string $password,
         protected ?string $username = '',

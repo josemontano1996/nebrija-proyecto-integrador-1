@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Cart;
 
 use App\Models\ProductModel;
+use App\Models\Classes\Product;
 
 /**
  * Class CartDataInitializer
@@ -12,12 +13,14 @@ use App\Models\ProductModel;
  * For working with the cart cookie use CartCookie.
  * For making database operation use  CartDb .
  */
-
 class CartDataInitializer
 {
+
+    /**
+     * @var CartProductData[] $products An array of CartProductData objects representing the products in the cart.
+     */
     private array $products = [];
     private float $totalPrice = 0;
-
     private bool $notFoundProduct = false;
 
     /**
@@ -37,7 +40,6 @@ class CartDataInitializer
     {
         // Get the cart from the cookie
         $cookieCart = new CartCookie();
-
         $cookieCartData = $cookieCart->getCart();
 
         // Get the ids of the products in the cart
@@ -60,7 +62,6 @@ class CartDataInitializer
 
         $this->products = $mergedProducts;
 
-
         if ($notFoundProduct) {
             $cartCookie = new CartCookie($this);
             $cartCookie->saveCart();
@@ -69,6 +70,13 @@ class CartDataInitializer
         }
     }
 
+    /**
+     * Merges fetched products with cookie cart items.
+     *
+     * @param Product[] $fetchedProducts The fetched products from the database.
+     * @param array $cookieCartData The cart items from the cookie.
+     * @return CartProductData[] The merged products.
+     */
     private function mergeProducts(array $fetchedProducts, array $cookieCartData): array
     {
         $products = [];
@@ -77,14 +85,12 @@ class CartDataInitializer
             $found = false;
             $index = 0;
             do {
-
                 $cookieItem = $cookieCartData[$index];
                 $cookieId =  $cookieItem['id'];
-                $productId =  $product['id'];
+                $productId =  $product->getId();
 
                 if ($cookieId === $productId) {
-
-                    $products[] = new CartProductData($product['id'], $product['name'], $cookieItem['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
+                    $products[] = new CartProductData($productId, $product->getName(), $cookieItem['quantity'], $product->getPrice(), $product->getType(), $product->getImageUrl(), $product->getDescription(), $product->getMinServings());
                     $found = true;
                 }
 
