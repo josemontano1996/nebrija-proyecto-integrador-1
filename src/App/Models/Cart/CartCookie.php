@@ -33,7 +33,7 @@ class CartCookie
             $cartData = $cart->getProducts();
 
             foreach ($cartData as $product) {
-                $productData = new CartCookieItem($product['id'], $product['quantity']);
+                $productData = new CartCookieItem($product->getId(), $product->getQuantity());
                 $this->cart[] = $productData;
             }
         } else {

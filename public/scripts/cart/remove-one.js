@@ -11,11 +11,11 @@ for (const button of removeButtons) {
     const productId = button.dataset.productid;
     let initialQuantity = parseInt(itemLi.querySelector('.quantity-span').innerHTML);
     const itemPrice = parseFloat(button.dataset.productprice);
-    const minServings = parseInt(button.dataset.minserving);
+    const minServings = parseInt(button.dataset.minservings);
     const newQuantity = --initialQuantity;
     const newSubtotal = newQuantity * itemPrice;
     const newTotalPrice = parseFloat(document.querySelector('.total-price').innerHTML) - itemPrice;
-
+    console.log(minServings);
     if (newQuantity < minServings || newQuantity < 1) {
       alert('Minimum required quantity required.');
       return;
