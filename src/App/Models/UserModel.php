@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Abstract\DeliveryData;
-use App\Models\Abstract\User;
+use App\Models\Classes\DeliveryData;
+use App\Models\Classes\User;
 use App\DAO\UserDAO;
 
 /**
@@ -21,20 +21,18 @@ class UserModel extends User
      *
      * @param string $email The user's email.
      * @param string $password The user's password.
-     * @param string|null $username The user's username (optional).
+     * @param string|null $name The user's name (optional).
      * @param string|null $role The user's role (optional).
      * @param string|null $id The user's ID (optional).
-     * @param DeliveryData|null $delivery_data The user's delivery data (optional).
      */
     public function __construct(
         string $email,
         string $password,
-        ?string $username = '',
+        ?string $name = '',
         ?string $role = '',
         ?string $id = '',
-        ?DeliveryData $delivery_data = null
     ) {
-        parent::__construct($email, $password, $username, $role, $id, $delivery_data);
+        parent::__construct($email, $password, $name, $role, $id);
     }
 
     /**
@@ -45,7 +43,7 @@ class UserModel extends User
     public function register(): bool
     {
         $userDAO = new UserDAO();
-        $registerSuccesfull = $userDAO->registerUser($this->username, $this->email, $this->password);
+        $registerSuccesfull = $userDAO->registerUser($this->name, $this->email, $this->password);
 
         return $registerSuccesfull;
     }
