@@ -6,7 +6,6 @@ namespace App\Models;
 
 require_once __DIR__ . '/../../const/consts.php';
 
-
 use App\DAO\ProductDAO;
 use App\Models\Classes\Product;
 
@@ -59,16 +58,16 @@ class ProductModel extends Product
      * Retrieves multiple products by their IDs.
      *
      * @param array<string> $ids An array of product IDs.
-     * @return [ ?Product[], bool ] : An array containing the products and a boolean indicating if any product was not found.
+     * @return  array{products: Product[], not_found: bool} An array containing the products and a boolean indicating if any product was not found.
      */
     static public function getProductsByIds(array $ids):array
     {
 
         $productDAO = new ProductDAO();
 
-        [$products,  $productNotFound] = $productDAO->getProductsByIds($ids);
-
-        return [$products,  $productNotFound];
+        $result = $productDAO->getProductsByIds($ids);
+        
+        return $result;
     }
 
     /**
@@ -143,23 +142,5 @@ class ProductModel extends Product
         $result = $productDAO->deleteProduct($product_id);
 
         return $result;
-    }
-
-    /**
-     * Retrieves all data of the product.
-     *
-     * @return array An array containing all the data of the product.
-     */
-    public function getAllData(): array
-    {
-        return [
-            'name' => $this->name,
-            'description' => $this->description,
-            'min_servings' => $this->min_servings,
-            'price' => $this->price,
-            'type' => $this->type,
-            'image_url' => $this->image_url,
-            'id' => $this->id
-        ];
     }
 }

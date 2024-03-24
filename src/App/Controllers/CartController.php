@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Cart\CartCookie;
 use App\Models\Cart\CartDataInitializer;
 use App\View;
 
@@ -23,7 +22,6 @@ class CartController
     {
         try {
             $cart = new CartDataInitializer();
-
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();
 

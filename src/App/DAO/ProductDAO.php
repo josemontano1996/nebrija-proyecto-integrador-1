@@ -34,7 +34,7 @@ class ProductDAO
     /**
      * Retrieves all products from the database.
      * 
-     * @return array An array of products.
+     * @return array<Product> An array of products.
      */
     public function getAllProducts(): array
     {
@@ -97,7 +97,7 @@ class ProductDAO
      * 
      * @param string $productId The ID of the product.
      * 
-     * @return array|null The product data as an associative array, or null if the product is not found.
+     * @return array<Product>|null The product data as an associative array, or null if the product is not found.
      */
     public function getProductById(string $productId): ?array
     {
@@ -175,9 +175,9 @@ class ProductDAO
     /**
      * Retrieves multiple products by their IDs from the database.
      * 
-     * @param array $ids An array of product IDs.
+     * @param array<string> $ids An array of product IDs.
      * 
-     * @return [ ?Product[], bool ] : An array containing the products and a boolean indicating if any product was not found.
+     * @return  array{products: Product[], not_found: bool} An array containing the products and a boolean indicating if any product was not found.
      */
     public function getProductsByIds(array $ids): array
     {
@@ -198,7 +198,7 @@ class ProductDAO
 
         $productNotFound = count($products) !== count($ids);
 
-        return [$products,  $productNotFound];
+        return ['products' => $products, 'not_found' =>  $productNotFound];
     }
 
     /**

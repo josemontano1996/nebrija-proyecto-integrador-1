@@ -21,7 +21,6 @@ class CartDataInitializer
      */
     private array $products = [];
     private float $totalPrice = 0;
-    private bool $notFoundProduct = false;
 
     /**
      * CartDataInitializer constructor.
@@ -54,15 +53,16 @@ class CartDataInitializer
         }
 
         // Get the products from the database
-        [$fetchedProducts, $notFoundProduct] = ProductModel::getProductsByIds($id_list);
+        $result = ProductModel::getProductsByIds($id_list);
 
-        $this->notFoundProduct = $notFoundProduct;
+        $products = $result['products'];
+        $productNotFound = $result['not_found'];
 
-        $mergedProducts = $this->mergeProducts($fetchedProducts, $cookieCartData);
+        $mergedProducts = $this->mergeProducts($products, $cookieCartData);
 
         $this->products = $mergedProducts;
 
-        if ($notFoundProduct) {
+        if ($productNotFound) {
             $cartCookie = new CartCookie($this);
             $cartCookie->saveCart();
 
@@ -133,15 +133,5 @@ class CartDataInitializer
     public function getTotalPrice(): float
     {
         return $this->totalPrice;
-    }
-
-    /**
-     * Checks if any product in the cart was not found.
-     *
-     * @return bool True if a product was not found, false otherwise.
-     */
-    public function getNotFoundProduct(): bool
-    {
-        return $this->notFoundProduct;
     }
 }

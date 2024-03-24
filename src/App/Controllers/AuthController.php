@@ -6,6 +6,8 @@ namespace App\Controllers;
 
 require_once ROOT_PATH . '/src/lib/validation.php';
 
+use App\Models\Cart\CartCookie;
+use App\Models\Cart\CartDb;
 use App\View;
 use App\Models\UserModel;
 
@@ -34,7 +36,7 @@ class AuthController
     /**
      * Handles the login form submission.
      * Validates the email and password, and logs in the user if valid.
-     * Redirects to the appropriate page based on the user's role.
+     * Redirects to the appropriate page based on the user's role and load the cart from the database into the cookie.
      */
     public function postLogIn(): void
     {
@@ -70,6 +72,14 @@ class AuthController
 
 
             if ($user) {
+
+                $cartDb = new CartDb($user['id'], new CartCookie());
+                $dbCartData = $cartDb->loadCart();
+
+                if ($dbCartData) {
+                    CartCookie::createCartCookie($dbCartData);
+                }
+
                 $_SESSION['user']['id'] = $user['id'];
                 if (!empty($user['role'])) {
                     $_SESSION['user']['role'] = $user['role'];
@@ -138,7 +148,7 @@ class AuthController
         // Process registration
         try {
 
-          
+
             $userInstance = new UserModel($email, $password, $username);
             $result = $userInstance->register();
 
@@ -166,28 +176,22 @@ class AuthController
     }
 
     /**
-     * Logs out the user by destroying the session and redirecting to the login page.
+     * Logs out the user by destroying the session, saving the cart cookie in the database and redirecting to the login page.
      */
     public function getLogOut(): void
     {
-        /*      $cookieCart = new CartCookie();
+        $userId = $_SESSION['user']['id'];
 
-        if ($cookieCart) {
-            $ids = $cookieCart->fetchIds();
+            $cartDb = new CartDb($userId, new CartCookie());
 
-            [$products, $notFoundProduct] = Product::getProductsByIds($ids);
+            $userHasCart = $cartDb->loadCart();
 
-            $cleanedUpCart = new Cart($products, $cookieCart);
+            if($userHasCart){
+                $cartDb->saveCart();
+            }
 
-            $cart = new CartCookie($cleanedUpCart);
-
-            $dbCart = new CartModel($_SESSION['user']['id'], $cart);
-
-            $result = $dbCart->saveCart();
-        }
-
-        exit(); */
-
+            CartCookie::destroyCartCookie();
+        
         session_destroy();
         header('Location: /login?success=Logged out successfully');
     }

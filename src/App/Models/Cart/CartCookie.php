@@ -76,11 +76,22 @@ class CartCookie
         return $this->cart;
     }
 
+    /**
+     * Retrieves the cart item at the specified index.
+     *
+     * @param int $index The index of the cart item.
+     * @return CartCookieItem The cart item at the specified index.
+     */
     public function getIndex(int $index): CartCookieItem
     {
         return $this->cart[$index];
     }
 
+    /**
+     * Retrieves the length of the cart array.
+     *
+     * @return int The length of the cart array.
+     */
     public function getArrayLength(): int
     {
         return count($this->cart);
@@ -100,5 +111,27 @@ class CartCookie
         }
 
         return $cart;
+    }
+
+    /**
+     * Destroys the cart cookie.
+     *
+     * @return void
+     */
+    static function destroyCartCookie(): void
+    {
+        setcookie("cart", "", time() - 3600, "/");
+    }
+
+    /**
+     * Creates a new cart cookie with the specified cart data.
+     *
+     * @param array $cartData The cart data to be stored in the cookie.
+     * @return void
+     */
+    static function createCartCookie(array $cartData): void
+    {
+        $cartData = json_encode($cartData);
+        setcookie('cart', $cartData, time() + 7 * 3600, '/');
     }
 }

@@ -4,32 +4,60 @@ declare(strict_types=1);
 
 namespace App\Models\Cart;
 
-use App\DB;
+use App\DAO\CartDAO;
 use App\Models\Cart\CartCookie;
-use mysqli_result;
+use App\Models\Classes\CartCookieItem;
 
+/**
+ * Class CartDb
+ * 
+ * Represents a database for storing and retrieving cart information.
+ */
 class CartDb
 {
     private string $user_id;
-    private array $items;
+    private array $products;
 
-    public function __construct(string $user_id,  CartCookie $items)
+    /**
+     * CartDb constructor.
+     * 
+     * @param string $user_id The ID of the user associated with the cart.
+     * @param CartCookie $cartCookie The cart cookie object used to retrieve the cart products.
+     */
+    public function __construct(string $user_id,  CartCookie $cartCookie)
     {
         $this->user_id = $user_id;
-        $this->items = $items->getCart();
+        $this->products = $cartCookie->getCart();
     }
 
-    public function saveCart(): mysqli_result | bool
+    /**
+     * Saves the cart to the database.
+     * 
+     * @return bool Returns true if the cart was successfully saved, false otherwise.
+     */
+    public function saveCart(): bool
     {
-        $dbInstance = DB::getInstance();
-        $db = $dbInstance->getDb();
+        $cartDAO = new CartDAO();
 
-        $items = json_encode($this->items);
+        $result = false;
 
-        $sql = "INSERT INTO carts (user_id, items) VALUES ('$this->user_id', '$items') ON DUPLICATE KEY UPDATE items = '$items'";
-
-        $result = $db->query($sql);
+        if (count($this->products) === 0) {
+            $result = $cartDAO->deleteCart($this->user_id);
+        } else {
+            $result = $cartDAO->updateCart($this->user_id, $this->products);
+        }
 
         return $result;
+    }
+
+    /**
+     * Loads the cart from the database.
+     * 
+     * @return array<CartCookieItem>|null Returns an array containing the cart products, or null if the cart is empty.
+     */
+    public function loadCart(): ?array
+    {
+        $cartDAO = new CartDAO();
+        return $cartDAO->getCart($this->user_id);
     }
 }
