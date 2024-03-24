@@ -28,6 +28,12 @@ $router->get('/logout', [App\Controllers\AuthController::class, 'getLogOut']);
 
 //Protected routes
 
+//User routes 
+
+
+//Orders routes
+$router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder'],);
+
 
 //Admin routes
 $router->get('/admin/menu', [App\Controllers\Admin\AdminMenuController::class, 'getMenu']);

@@ -181,18 +181,25 @@ class AuthController
     public function getLogOut(): void
     {
         $userId = $_SESSION['user']['id'];
+        try {
 
             $cartDb = new CartDb($userId, new CartCookie());
 
             $userHasCart = $cartDb->loadCart();
 
-            if($userHasCart){
+            if ($userHasCart) {
                 $cartDb->saveCart();
             }
 
             CartCookie::destroyCartCookie();
-        
-        session_destroy();
-        header('Location: /login?success=Logged out successfully');
+
+            session_destroy();
+            header('Location: /login?success=Logged out successfully');
+        } catch (\Exception $e) {
+            $_SESSION['error'] = 'An error occurred';
+            http_response_code(500);
+            header('Location: /');
+            exit();
+        }
     }
 }
