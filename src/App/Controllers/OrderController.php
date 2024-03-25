@@ -15,6 +15,32 @@ use App\View;
 class OrderController
 {
 
+    public function getOrders()
+    {
+        $userId = $_SESSION['user']['id'];
+
+        if (!$userId) {
+            $_SESSION['error'] = 'Session not found. Log in again.';
+            $_SESSION['user'] = null;
+            header('Location: /login');
+            exit();
+        }
+        try {
+            $orders = OrderModel::getUserOrders($userId);
+
+            if (!$orders) {
+                $_SESSION['error'] = 'No orders found.';
+                header('Location: /menu');
+                exit();
+            }
+
+            return (new View('user/orders/allOrders', [$orders]))->render();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            header('Location: /menu');
+            exit();
+        }
+    }
     public function postOrder(): void
     {
         $userId = $_SESSION['user']['id'];
@@ -58,11 +84,11 @@ class OrderController
             }
 
             $orderModel = new OrderModel($userId, $addressId, new CartDataInitializer(), $delivery_date);
-        
+
             $success = $orderModel->saveOrderData();
 
 
-            if(!$success){
+            if (!$success) {
                 $addressModel->deleteAddressData($addressId);
 
                 http_response_code(500);
@@ -74,10 +100,9 @@ class OrderController
 
             echo json_encode('/user/orders');
             exit();
-
         } catch (\Exception $e) {
             http_response_code(500);
-            echo json_encode($e->getMessage());
+            echo json_encode('Something went wrong. Try again later.');
             exit();
         }
     }

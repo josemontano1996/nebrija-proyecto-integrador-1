@@ -3,6 +3,7 @@
 namespace App\DAO;
 
 use App\DB;
+use App\Models\Classes\AddressData;
 use mysqli;
 use Ramsey\Uuid\Uuid;
 
@@ -67,5 +68,28 @@ class AddressDAO
         $statement->close();
 
         return $result;
+    }
+
+    public function getAddressesByIds(array $ids): ?array
+    {
+        $db = $this->db;
+
+        // Implode the IDs without wrapping them
+        $placeholders = implode("', '", $ids);
+
+        $query = "SELECT * FROM addresses WHERE id IN ('$placeholders')";
+
+        $result = $db->query($query);
+        $addresses = $result->fetch_all(MYSQLI_ASSOC);
+
+        if (count($addresses) === 0) {
+            return null;
+        }
+
+        foreach ($addresses as $key => $address) {
+            $addresses[$key] = new AddressData($address['street'], $address['city'], $address['postal'], $address['id']);
+        }
+
+        return $addresses;
     }
 }

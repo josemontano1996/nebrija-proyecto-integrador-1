@@ -4,21 +4,21 @@
             <h4>User section</h4>
             <ul>
                 <li>
-                    <a href="">
+                    <a href="/cart">
                         <img class="icon" src="/public/assets/icons/bag-icon.svg" alt="cart icon">
                         <span>Cart</span>
                         </img>
                     </a>
                 </li>
                 <li>
-                    <a href="">
+                    <a href="/user/account">
                         <img class="icon" src="/public/assets/icons/user-icon.svg" alt="account icon">
                         <span>Account</span>
                         </img>
                     </a>
                 </li>
                 <li>
-                    <a href="">
+                    <a href="/user/orders">
                         <img class="icon" src="/public/assets/icons/orders-icon.svg" alt="orders icon">
                         <span>Orders</span>
                         </img>

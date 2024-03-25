@@ -31,4 +31,12 @@ class AddressModel extends AddressData
 
         return $result;
     }
+
+    static public function getAddressesByIds(array $addressesIds): ?array
+    {
+        $addressDAO = new AddressDAO();
+        $addresses = $addressDAO->getAddressesByIds($addressesIds);
+
+        return $addresses;
+    }
 }

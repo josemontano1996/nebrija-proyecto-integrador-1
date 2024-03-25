@@ -15,13 +15,49 @@ class AddressData
      * @var string $city The city for the delivery.
      * @var string $postal The postal code for the delivery.
      * @var string $phone The phone number for the delivery.
-     * @var string|null $user_id The user ID associated with the delivery data.
      */
-    public function __construct(protected string $street, protected string $city, protected string $postal, protected ?string $user_id = null)
+    public function __construct(protected string $street, protected string $city, protected string $postal, protected ?string $address_id = null)
     {
         $this->street = $street;
         $this->city = $city;
         $this->postal = $postal;
-        $this->user_id = $user_id;
+        $this->address_id = $address_id;
+    }
+
+
+
+    /**
+     * Get the street address for the delivery.
+     *
+     * @return string
+     */
+    public function getStreet(): string
+    {
+        return $this->street;
+    }
+
+    /**
+     * Get the city for the delivery.
+     *
+     * @return string
+     */
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    /**
+     * Get the postal code for the delivery.
+     *
+     * @return string
+     */
+    public function getPostal(): string
+    {
+        return $this->postal;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->address_id;
     }
 }
