@@ -47,15 +47,25 @@ class SeedController
  */
 function seedUsersTable($db)
 {
+      // Common password for all users
     $password = password_hash('12345678', PASSWORD_BCRYPT, ['cost' => 12]);
+
+    // Define user data
     $owner = ['email' => 'owner@owner.com', 'password' => $password, 'name' => 'Owner name', 'role' => 'owner'];
     $admin = ['email' => 'admin@admin.com', 'password' => $password, 'name' => 'Admin name', 'role' => 'admin'];
     $user = ['email' => 'user@user.com', 'password' => $password, 'name' => 'User name'];
 
-    $db->query("INSERT INTO users (name, email, password, role) VALUES ('{$owner['name']}', '{$owner['email']}', '{$owner['password']}', '{$owner['role']}')");
-    $db->query("INSERT INTO users (name, email, password, role) VALUES ('{$admin['name']}', '{$admin['email']}', '{$admin['password']}', '{$admin['role']}')");
-    $db->query("INSERT INTO users (name, email, password) VALUES ('{$user['name']}', '{$user['email']}', '{$user['password']}')");
+    // Generate UUID for each user
+    $owner_id = Uuid::uuid4()->toString();
+    $admin_id = Uuid::uuid4()->toString();
+    $user_id = Uuid::uuid4()->toString();
+
+    // Construct and execute queries
+    $db->query("INSERT INTO users (id, name, email, password, role) VALUES ('$owner_id', '{$owner['name']}', '{$owner['email']}', '{$owner['password']}', '{$owner['role']}')");
+    $db->query("INSERT INTO users (id, name, email, password, role) VALUES ('$admin_id', '{$admin['name']}', '{$admin['email']}', '{$admin['password']}', '{$admin['role']}')");
+    $db->query("INSERT INTO users (id, name, email, password) VALUES ('$user_id', '{$user['name']}', '{$user['email']}', '{$user['password']}')");
 }
+
 
 /**
  * Seeds the products table in the database.
@@ -75,6 +85,7 @@ function seedProductsTable($products, $db)
 
     for ($i = 0; $i < count($products); $i++) {
         $p = $products[$i]->getAllData();
+        $id = Uuid::uuid4();
         $name = $p['name'];
         $description = $p['description'];
         $min_servings = $p['min_servings'];
@@ -82,7 +93,7 @@ function seedProductsTable($products, $db)
         $type = $p['type'];
         $image_url = $p['image_url'];
 
-        $sql = "INSERT INTO products (name, description, min_servings, price, type, image_url) VALUES ('$name', '$description', $min_servings, $price, '$type', '$image_url')";
+        $sql = "INSERT INTO products (id, name, description, min_servings, price, type, image_url) VALUES ('$id','$name', '$description', $min_servings, $price, '$type', '$image_url')";
 
         $db->query($sql);
     }

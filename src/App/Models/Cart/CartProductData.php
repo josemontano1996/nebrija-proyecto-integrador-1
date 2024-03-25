@@ -73,4 +73,18 @@ class CartProductData extends Product
     {
         return $this->quantity;
     }
+
+    public function generateDataObject(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'quantity' => $this->quantity,
+            'price' => $this->price,
+            'type' => $this->type,
+            'image_url' => $this->image_url,
+            'min_servings' => $this->min_servings,
+            'id' => $this->id
+        ];
+    }
 }

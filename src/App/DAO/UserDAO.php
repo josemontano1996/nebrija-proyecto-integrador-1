@@ -6,6 +6,7 @@ namespace App\DAO;
 
 use App\DB;
 use mysqli;
+use Ramsey\Uuid\Uuid;
 
 class UserDAO
 {
@@ -70,8 +71,9 @@ class UserDAO
 
         $db = $this->db;
 
+        $id = Uuid::uuid4();
         // Prepare the SQL query with placeholders
-        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $query = "INSERT INTO users (id, username, email, password) VALUES (? , ?, ?, ?)";
 
         // Prepare the statement
         $statement = $db->prepare($query);
@@ -83,7 +85,7 @@ class UserDAO
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
         // Bind the parameters
-        $statement->bind_param('sss', $username, $email, $hashedPassword);
+        $statement->bind_param('ssss', $id, $username, $email, $hashedPassword);
 
         // Execute the statement
         $result = $statement->execute();

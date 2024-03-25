@@ -143,4 +143,22 @@ class ProductModel extends Product
 
         return $result;
     }
+
+    /**
+     * Retrieves all data of the product.
+     *
+     * @return array An array containing all the data of the product.
+     */
+    public function getAllData(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'min_servings' => $this->min_servings,
+            'price' => $this->price,
+            'type' => $this->type,
+            'image_url' => $this->image_url,
+            'id' => $this->id
+        ];
+    }
 }

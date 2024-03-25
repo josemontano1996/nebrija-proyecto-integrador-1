@@ -68,6 +68,8 @@ class ProductDAO
     {
         $db = $this->db;
 
+        $id = Uuid::uuid4();
+
         $name = $db->real_escape_string($name);
         $description = $db->real_escape_string($description);
         $min_servings = filter_var($min_servings, FILTER_VALIDATE_INT);
@@ -75,14 +77,14 @@ class ProductDAO
         $type = $db->real_escape_string($type);
         $image_url = $db->real_escape_string($image_url);
 
-        $query = "INSERT INTO products (name, description, min_servings, price, type, image_url) VALUES ( ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO products (id, name, description, min_servings, price, type, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $statement = $db->prepare($query);
         if (!$statement) {
             return false;
         }
 
-        $statement->bind_param('ssidss',  $name, $description, $min_servings, $price, $type, $image_url);
+        $statement->bind_param('sssidss', $id,  $name, $description, $min_servings, $price, $type, $image_url);
 
         $result = $statement->execute();
 

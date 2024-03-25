@@ -46,4 +46,26 @@ class AddressDAO
             return null;
         }
     }
+
+    public function deleteAddressData(string $addressId): bool
+    {
+
+        $db = $this->db;
+
+        $query = "DELETE FROM addresses WHERE id = ?";
+
+        $statement = $db->prepare($query);
+
+        if (!$statement) {
+            return false;
+        }
+
+        $statement->bind_param('s', $addressId);
+
+        $result = $statement->execute();
+
+        $statement->close();
+
+        return $result;
+    }
 }

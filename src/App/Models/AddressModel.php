@@ -23,4 +23,12 @@ class AddressModel extends AddressData
 
         return $addressId;
     }
+
+    public function deleteAddressData(string $addressId): bool
+    {
+        $addressDAO = new AddressDAO();
+        $result = $addressDAO->deleteAddressData($addressId);
+
+        return $result;
+    }
 }

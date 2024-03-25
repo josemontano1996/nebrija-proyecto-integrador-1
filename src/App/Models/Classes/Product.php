@@ -107,4 +107,17 @@ class Product
     {
         return $this->id;
     }
+
+    public function generateDataObject(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'type' => $this->type,
+            'image_url' => $this->image_url,
+            'min_servings' => $this->min_servings,
+            'id' => $this->id
+        ];
+    }
 }

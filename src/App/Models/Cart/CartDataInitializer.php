@@ -9,7 +9,7 @@ use App\Models\Classes\Product;
 
 /**
  * Class CartDataInitializer
- * Prepares the cart data for display, including merging cookie data with fetched products and calculating totals.
+ * Prepares the cart the complete cart data, including merging cookie data with fetched products and calculating totals.
  * For working with the cart cookie use CartCookie.
  * For making database operation use  CartDb .
  */
@@ -24,7 +24,7 @@ class CartDataInitializer
 
     /**
      * CartDataInitializer constructor.
-     * Initializes the cart data by merging fetched products with cookie cart items and calculating the total price.
+     * Initializes the cart data (primarily for display) by merging fetched products with cookie cart items and calculating the total price.
      */
     public function __construct()
     {
@@ -89,7 +89,13 @@ class CartDataInitializer
                 $cookieId =  $cookieItem['id'];
                 $productId =  $product->getId();
 
+
                 if ($cookieId === $productId) {
+
+                    if ($product->getMinServings() > $cookieItem['quantity']) {
+                        $cookieItem['quantity'] = $product->getMinServings();
+                    }
+                    
                     $products[] = new CartProductData($productId, $product->getName(), $cookieItem['quantity'], $product->getPrice(), $product->getType(), $product->getImageUrl(), $product->getDescription(), $product->getMinServings());
                     $found = true;
                 }
@@ -133,5 +139,16 @@ class CartDataInitializer
     public function getTotalPrice(): float
     {
         return $this->totalPrice;
+    }
+
+    public function generateProductsDataObject(): array
+    {
+        $cartData = [];
+
+        foreach ($this->products as $product) {
+            $cartData[] = $product->generateDataObject();
+        }
+
+        return $cartData;
     }
 }
