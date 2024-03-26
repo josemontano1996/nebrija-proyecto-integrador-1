@@ -35,6 +35,7 @@ $router->get('/logout', [App\Controllers\AuthController::class, 'getLogOut']);
 $router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder']);
 $router->get('/user/orders', [App\Controllers\OrderController::class, 'getOrders']);
 $router->get('/user/order', [App\Controllers\OrderController::class, 'getOrder']);
+$router->get('/user/order/cancel', [App\Controllers\OrderController::class, 'cancelPendingOrder']);
 
 
 //Admin routes

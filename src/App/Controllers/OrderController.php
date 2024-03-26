@@ -15,6 +15,56 @@ use App\View;
 class OrderController
 {
 
+    public function cancelPendingOrder(){
+        $userId = $_SESSION['user']['id'];
+        $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
+
+        if (!$userId) {
+            $_SESSION['error'] = 'Session not found. Log in again.';
+            $_SESSION['user'] = null;
+            header('Location: /login');
+            exit();
+        }
+
+        if (!$orderId) {
+            $_SESSION['error'] = 'Order not found.';
+            header('Location: /user/orders');
+            exit();
+        }
+
+        try {
+            $order = OrderModel::getOrderById($userId, $orderId);
+
+            if (!$order) {
+                $_SESSION['error'] = 'Order not found.';
+                header('Location: /user/orders');
+                exit();
+            }
+
+            if($order->getStatus() !== 'pending'){
+                $_SESSION['error'] = 'Order cannot be cancelled.';
+                header('Location: /user/orders');
+                exit();
+            }
+
+            $success = OrderModel::cancelOrder($userId, $orderId);
+
+            if(!$success){
+                $_SESSION['error'] = 'Order could not be cancelled.';
+                header('Location: /user/orders');
+                exit();
+            }
+
+            $_SESSION['success'] = 'Order cancelled successfully.';
+            header('Location: /user/orders?orderid=' . $orderId);
+            exit();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            header('Location: /user/orders');
+            exit();
+        }
+    }
+
     public function getOrder()
     {
         $userId = $_SESSION['user']['id'];

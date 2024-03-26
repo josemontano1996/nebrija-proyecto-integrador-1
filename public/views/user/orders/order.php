@@ -7,9 +7,7 @@
 
 <body>
     <?php
-    $midHeader =  "<a href='/user/orders' class='btn-primary'>To All Orders</a>";
-
-    echo createHeader($midHeader);
+    echo createHeader();
     ?>
     <main>
         <?php $order = $params[0]; ?>
@@ -36,7 +34,12 @@
                 <p>Street: <?= $order->getAddress()->getStreet(); ?></p>
                 <p>Postal Code: <?= $order->getAddress()->getPostal(); ?></p>
                 <p>City: <?= $order->getAddress()->getCity(); ?></p>
-                <a href="/user/orders" class="btn-secondary">Back to Orders</a>
+                <div id="footer-right-container">
+                    <a href="/user/orders" class="btn-secondary">Back to Orders</a>
+                    <?php if ($order->getStatus() === 'pending') : ?>
+                        <a href="/user/order/cancel?orderid=<?= $order->getId() ?>" class="btn-error">Cancel Order</a>
+                    <?php endif; ?>
+                </div>
             </section>
         </div>
 

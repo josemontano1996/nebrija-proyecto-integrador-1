@@ -65,4 +65,13 @@ class OrderModel
 
         return $orders;
     }
+
+    static public function cancelOrder(string $userId, string $orderId): bool
+    {
+        $orderDAO = new OrderDAO();
+
+        $result = $orderDAO->cancelOrder($userId, $orderId);
+
+        return $result;
+    }
 }

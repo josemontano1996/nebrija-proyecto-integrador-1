@@ -160,4 +160,24 @@ class OrderDAO
             return $orders;
         }
     }
+
+    public function cancelOrder(string $userId, string $orderId): bool
+    {
+        $db = $this->db;
+
+        $userId = $db->real_escape_string($userId);
+        $orderId = $db->real_escape_string($orderId);
+
+        $sql = "UPDATE orders SET status = 'cancelled' WHERE user_id = ? AND id = ?";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bind_param('ss', $userId, $orderId);
+
+        $result = $stmt->execute();
+
+        $stmt->close();
+
+        return $result;
+    }
 }

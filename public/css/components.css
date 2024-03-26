@@ -51,12 +51,28 @@
   padding: 8px 16px;
   font-size: 1.2rem;
 }
+.btn-error {
+  display: block;
+  width: fit-content;
+  color: red;
+  text-align: center;
+  background-color: white;
+  border: 1px solid red;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 1.2rem;
+}
 
 .btn-primary:hover {
   background-color: rgba(6, 208, 134, 0.8);
   cursor: pointer;
 }
 .btn-secondary:hover {
+  color: var(--primary-color);
+  background-color: #eaeaea;
+  cursor: pointer;
+}
+.btn-error:hover {
   color: var(--primary-color);
   background-color: #eaeaea;
   cursor: pointer;
@@ -80,7 +96,8 @@
   text-align: center;
 }
 
-.error-popup, .success-popup {
+.error-popup,
+.success-popup {
   z-index: 99;
   top: 50%;
   left: 50%;
@@ -95,7 +112,8 @@
   align-items: center;
 }
 
-.error-popup-content, .success-popup-content {
+.error-popup-content,
+.success-popup-content {
   text-align: center;
   background-color: white;
   border: 1px solid var(--secondary-color);
@@ -133,16 +151,16 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-  } 
-  & input, select, textarea {
+  }
+  & input,
+  select,
+  textarea {
     max-width: 60%;
   }
   & select {
     padding: 0.5rem;
   }
-  
 }
-
 
 .divider {
   display: block;
