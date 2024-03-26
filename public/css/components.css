@@ -142,3 +142,19 @@
   }
   
 }
+
+
+.divider {
+  display: block;
+  margin: 0.7rem auto;
+  border: 1px solid rgba(174, 172, 172, 0.4);
+  width: 80%;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.bold {
+  font-weight: 500;
+}

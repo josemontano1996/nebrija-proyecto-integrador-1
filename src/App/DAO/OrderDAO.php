@@ -46,7 +46,7 @@ class OrderDAO
 
         $userId = $db->real_escape_string($userId);
 
-        $sql = "SELECT * FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ?";
+        $sql = "SELECT * FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? ORDER BY created_at";
 
         $stmt = $db->prepare($sql);
 
@@ -59,7 +59,35 @@ class OrderDAO
         }
 
         $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-      
+
+        foreach ($orders as $key => $order) {
+            $orders[$key]['total_price'] = (float) $order['total_price'];
+            $orders[$key]['products'] = json_decode($order['products'], true);
+        }
+
+        $stmt->close();
+
+        return $orders;
+    }
+
+    public function getOrdersByUserIdAndStatus(string $userId, $status)
+    {
+        $db = $this->db;
+
+        $userId = $db->real_escape_string($userId);
+
+        $sql = "SELECT * FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? AND status = ? ORDER BY created_at";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('ss', $userId, $status);
+        $result = $stmt->execute();
+
+        if (!$result) {
+            return null;
+        }
+
+        $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
         foreach ($orders as $key => $order) {
             $orders[$key]['total_price'] = (float) $order['total_price'];
             $orders[$key]['products'] = json_decode($order['products'], true);

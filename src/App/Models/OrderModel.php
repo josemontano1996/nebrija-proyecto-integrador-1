@@ -46,4 +46,13 @@ class OrderModel
          
         return $orders;
     }
+
+    static public function getUserOrdersByStatus(string $userId, string $status): ?array
+    {
+        $orderDAO = new OrderDAO();
+
+        $orders = $orderDAO->getOrdersByUserIdAndStatus($userId, $status);
+
+        return $orders;
+    }
 }

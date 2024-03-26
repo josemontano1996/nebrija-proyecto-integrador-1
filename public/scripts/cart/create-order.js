@@ -5,7 +5,7 @@ form.addEventListener('submit', async (e) => {
 
   const formData = new FormData(form);
   let response;
-  console.log('here');
+
   try {
     response = await fetch('/user/order', {
       method: 'POST',

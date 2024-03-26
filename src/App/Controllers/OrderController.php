@@ -26,11 +26,18 @@ class OrderController
             exit();
         }
         try {
-            $orders = OrderModel::getUserOrders($userId);
+            $orders = [];
+
+            if (!isset($_GET['status'])) {
+                $orders = OrderModel::getUserOrders($userId);
+            } else {
+                $status = $_GET['status'];
+                $orders = OrderModel::getUserOrdersByStatus($userId, $status);
+            }
 
             if (!$orders) {
                 $_SESSION['error'] = 'No orders found.';
-                header('Location: /menu');
+                header('Location: /user/orders');
                 exit();
             }
 
@@ -57,6 +64,13 @@ class OrderController
         $delivery_date = $_POST['delivery_date'];
 
         $order_data = json_decode($_COOKIE['cart']);
+
+
+        if ($delivery_date < date('Y-m-d H:i:s')) {
+            http_response_code(400);
+            echo json_encode('Invalid date.');
+            exit();
+        }
 
         if (!$order_data) {
             http_response_code(400);
