@@ -18,6 +18,7 @@ class Order
      */
     public function __construct(
         protected string $user_id,
+        protected string $user_name,
         protected AddressData $address_id,
         protected array $products,
         protected float $total_price,
@@ -27,6 +28,7 @@ class Order
         protected ?string $id = null
     ) {
         $this->user_id = $user_id;
+        $this->user_name = $user_name;
         $this->address_id = $address_id;
         $this->products = $products;
         $this->total_price = $total_price;
@@ -46,6 +48,10 @@ class Order
         return $this->id;
     }
 
+    public function getUserName(): string
+    {
+        return $this->user_name;
+    }
     /**
      * Get the ID of the user who placed the order.
      *

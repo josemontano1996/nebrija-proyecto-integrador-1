@@ -15,7 +15,8 @@ use App\View;
 class OrderController
 {
 
-    public function cancelPendingOrder(){
+    public function cancelPendingOrder()
+    {
         $userId = $_SESSION['user']['id'];
         $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
 
@@ -41,7 +42,7 @@ class OrderController
                 exit();
             }
 
-            if($order->getStatus() !== 'pending'){
+            if ($order->getStatus() !== 'pending') {
                 $_SESSION['error'] = 'Order cannot be cancelled.';
                 header('Location: /user/orders');
                 exit();
@@ -49,7 +50,7 @@ class OrderController
 
             $success = OrderModel::cancelOrder($userId, $orderId);
 
-            if(!$success){
+            if (!$success) {
                 $_SESSION['error'] = 'Order could not be cancelled.';
                 header('Location: /user/orders');
                 exit();
@@ -115,16 +116,21 @@ class OrderController
 
             if (!isset($_GET['status'])) {
                 $orders = OrderModel::getUserOrders($userId);
+                if (!$orders) {
+                    $_SESSION['error'] = 'No orders found.';
+                    header('Location: /menu');
+                    exit();
+                }
             } else {
                 $status = $_GET['status'];
                 $orders = OrderModel::getUserOrdersByStatus($userId, $status);
+                if (!$orders) {
+                    $_SESSION['error'] = 'No orders found.';
+                    header('Location: /user/orders');
+                    exit();
+                }
             }
 
-            if (!$orders) {
-                $_SESSION['error'] = 'No orders found.';
-                header('Location: /user/orders');
-                exit();
-            }
 
             return (new View('user/orders/allOrders', [$orders]))->render();
         } catch (\Exception $e) {
@@ -142,7 +148,7 @@ class OrderController
             echo json_encode('You must be logged in to place an order.');
             exit();
         }
-
+        $user_name = trim($_POST['user_name']);
         $street = trim($_POST['street']);
         $postal = trim($_POST['postal']);
         $city = trim($_POST['city']);
@@ -163,7 +169,7 @@ class OrderController
             exit();
         }
 
-        $isInvalidData = isInvalidDeliveryData($street, $postal, $city, $delivery_date);
+        $isInvalidData = isInvalidDeliveryData($user_name, $street, $postal, $city, $delivery_date);
 
         if ($isInvalidData) {
             http_response_code(400);
@@ -182,7 +188,7 @@ class OrderController
                 exit();
             }
 
-            $orderModel = new OrderModel($userId, $addressId, new CartDataInitializer(), $delivery_date);
+            $orderModel = new OrderModel($userId, $user_name, $addressId, new CartDataInitializer(), $delivery_date);
 
             $success = $orderModel->saveOrderData();
 
@@ -201,7 +207,7 @@ class OrderController
             exit();
         } catch (\Exception $e) {
             http_response_code(500);
-            echo json_encode('Something went wrong. Try again later.');
+            echo json_encode($e->getMessage());
             exit();
         }
     }

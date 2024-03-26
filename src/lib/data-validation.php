@@ -44,10 +44,13 @@ function isInvalidProductData(string $name, string $description, int $min_servin
     return $error;
 }
 
-function isInvalidDeliveryData(string $street, string $postal, string $city, string $deliveryDate): string
+function isInvalidDeliveryData(string $user_name, string $street, string $postal, string $city, string $deliveryDate): string
 {
     $error = '';
 
+    if (!isset($user_name)) {
+        $error = $error . "</br>" . "User name field is mandatory.";
+    }
     if (!isset($street)) {
         $error = $error . "</br>" . "Street field is mandatory.";
     }

@@ -13,28 +13,43 @@ class OrderDAO
 {
     private mysqli $db;
 
+    /**
+     * OrderDAO constructor.
+     */
     public function __construct()
     {
         $this->db = DB::getInstance()->getDb();
     }
 
-    public function saveOrderData(string $user_id, string $address_id, array $products, float $total_price, string $status, string $delivery_date): bool
+    /**
+     * Saves order data to the database.
+     *
+     * @param string $user_id The ID of the user placing the order.
+     * @param string $address_id The ID of the address associated with the order.
+     * @param array $products An array of products in the order.
+     * @param float $total_price The total price of the order.
+     * @param string $status The status of the order.
+     * @param string $delivery_date The delivery date of the order.
+     * @return bool Returns true if the order data is successfully saved, false otherwise.
+     */
+    public function saveOrderData(string $user_id, string $user_name, string $address_id, array $products, float $total_price, string $status, string $delivery_date): bool
     {
         $db = $this->db;
         $order_id = Uuid::uuid4();
         $jsonProducts = json_encode($products);
 
         $user_id = $db->real_escape_string($user_id);
+        $user_name = $db->real_escape_string($user_name);
         $address_id = $db->real_escape_string($address_id);
         $total_price = $db->real_escape_string($total_price);
         $status = $db->real_escape_string($status);
         $delivery_date = $db->real_escape_string($delivery_date);
 
-        $sql = "INSERT INTO orders (id, user_id, address_id, products, total_price, status, delivery_date, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO orders (id,  user_id, user_name, address_id, products, total_price, status, delivery_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         $stmt = $db->prepare($sql);
 
-        $stmt->bind_param('ssssiss', $order_id, $user_id, $address_id, $jsonProducts, $total_price, $status, $delivery_date);
+        $stmt->bind_param('sssssiss', $order_id, $user_id, $user_name, $address_id, $jsonProducts, $total_price, $status, $delivery_date);
 
         $result = $stmt->execute();
 
@@ -43,6 +58,13 @@ class OrderDAO
         return $result;
     }
 
+    /**
+     * Retrieves an order by user ID and order ID.
+     *
+     * @param string $userId The ID of the user.
+     * @param string $orderId The ID of the order.
+     * @return Order|null Returns the Order object if found, null otherwise.
+     */
     public function getOrderById(string $userId, string $orderId): ?Order
     {
 
@@ -73,14 +95,19 @@ class OrderDAO
             $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
         }
 
-        $order = new Order($result['user_id'], new AddressData($result['street'], $result['city'], $result['postal'], $result['address_id']), $products, (float) $result['total_price'], $result['delivery_date'], $result['status'], $result['created_at'], $result['id']);
+        $order = new Order($result['user_id'], $result['user_name'], new AddressData($result['street'], $result['city'], $result['postal'], $result['address_id']), $products, (float) $result['total_price'], $result['delivery_date'], $result['status'], $result['created_at'], $result['id']);
 
         $stmt->close();
 
         return $order;
     }
 
-
+    /**
+     * Retrieves orders by user ID.
+     *
+     * @param string $userId The ID of the user.
+     * @return Order[]|null Returns an array of Order objects if found, null otherwise.
+     */
     public function getOrdersByUserId(string $userId): ?array
     {
         $db = $this->db;
@@ -110,18 +137,22 @@ class OrderDAO
                 $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
             }
 
-
-
-            $orders[$key] = new Order($order['user_id'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
+            $orders[$key] = new Order($order['user_id'], $order['user_name'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
         }
 
         $stmt->close();
 
-
         return $orders;
     }
 
-    public function getOrdersByUserIdAndStatus(string $userId, $status)
+    /**
+     * Retrieves orders by user ID and status.
+     *
+     * @param string $userId The ID of the user.
+     * @param mixed $status The status of the orders.
+     * @return Order[]|null Returns an array of Order objects if found, null otherwise.
+     */
+    public function getOrdersByUserIdAndStatus(string $userId, $status): ?array
     {
         $db = $this->db;
 
@@ -148,19 +179,21 @@ class OrderDAO
                 $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
             }
 
-
-            foreach ($orders as $key => $order) {
-                $products = json_decode($order['products'], true);
-                $orders[$key] = new Order($order['user_id'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
-            }
-
-
-            $stmt->close();
-
-            return $orders;
+            $orders[$key] = new Order($order['user_id'], $order['user_name'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
         }
+
+        $stmt->close();
+
+        return $orders;
     }
 
+    /**
+     * Cancels an order.
+     *
+     * @param string $userId The ID of the user.
+     * @param string $orderId The ID of the order.
+     * @return bool Returns true if the order is successfully cancelled, false otherwise.
+     */
     public function cancelOrder(string $userId, string $orderId): bool
     {
         $db = $this->db;
