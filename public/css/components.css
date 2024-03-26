@@ -156,5 +156,9 @@
 }
 
 .bold {
-  font-weight: 500;
+  font-weight: 800;
+}
+
+.underline {
+  text-decoration: underline;
 }

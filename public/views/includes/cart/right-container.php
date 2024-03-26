@@ -1,4 +1,4 @@
-<div id="rigth-container">
+<div id="right-container">
     <?php if (isset($_SESSION['user'])) : ?>
         <h2>Order summary</h2>
         <p>Total price: <span class="total-price"> <?= $params['totalPrice'] ?></span> &euro;</p>

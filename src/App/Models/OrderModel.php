@@ -16,8 +16,8 @@ class OrderModel
     private string $delivery_date;
 
     private string $status = 'pending';
-    private string|null $createdAt;
-    public function __construct(string $user_id, string $address_id, CartDataInitializer $products, string $delivery_date, ?string $status = 'pending', ?string $createdAt = null)
+
+    public function __construct(string $user_id, string $address_id, CartDataInitializer $products, string $delivery_date, ?string $status = 'pending')
     {
         $this->user_id = $user_id;
         $this->address_id = $address_id;
@@ -25,7 +25,6 @@ class OrderModel
         $this->products = $products->generateProductsDataObject();
         $this->total_price = $products->getTotalPrice();
         $this->delivery_date = $delivery_date;
-        $this->createdAt = $createdAt;
     }
 
     public function saveOrderData(): bool
@@ -38,12 +37,21 @@ class OrderModel
         return $result;
     }
 
+    static public function getOrderById(string $userId, string $orderId): ?Order
+    {
+        $orderDAO = new OrderDAO();
+
+        $order = $orderDAO->getOrderById($userId,  $orderId);
+
+        return $order;
+    }
+
     static public function getUserOrders(string $userId): ?array
     {
         $orderDAO = new OrderDAO();
 
         $orders = $orderDAO->getOrdersByUserId($userId);
-         
+
         return $orders;
     }
 
@@ -52,6 +60,8 @@ class OrderModel
         $orderDAO = new OrderDAO();
 
         $orders = $orderDAO->getOrdersByUserIdAndStatus($userId, $status);
+
+
 
         return $orders;
     }

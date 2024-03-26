@@ -34,6 +34,7 @@ $router->get('/logout', [App\Controllers\AuthController::class, 'getLogOut']);
 //Orders routes
 $router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder']);
 $router->get('/user/orders', [App\Controllers\OrderController::class, 'getOrders']);
+$router->get('/user/order', [App\Controllers\OrderController::class, 'getOrder']);
 
 
 //Admin routes

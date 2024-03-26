@@ -15,6 +15,41 @@ use App\View;
 class OrderController
 {
 
+    public function getOrder()
+    {
+        $userId = $_SESSION['user']['id'];
+        $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
+
+        if (!$userId) {
+            $_SESSION['error'] = 'Session not found. Log in again.';
+            $_SESSION['user'] = null;
+            header('Location: /login');
+            exit();
+        }
+
+        if (!$orderId) {
+            $_SESSION['error'] = 'Order not found.';
+            header('Location: /user/orders');
+            exit();
+        }
+
+        try {
+            $order = OrderModel::getOrderById($userId, $orderId);
+
+            if (!$order) {
+                $_SESSION['error'] = 'Order not found.';
+                header('Location: /user/orders');
+                exit();
+            }
+
+            return (new View('user/orders/order', [$order]))->render();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            header('Location: /user/orders');
+            exit();
+        }
+    }
+
     public function getOrders()
     {
         $userId = $_SESSION['user']['id'];

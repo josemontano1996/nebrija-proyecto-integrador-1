@@ -1,11 +1,14 @@
-main {
-  padding: 0 2rem;
+.page-header {
+  text-align: center;
+font-size: 1.5rem;
+margin-bottom: 1rem;
+& h2 {
+  font-size: 1.3rem;
+}
 }
 
-#page-title {
-  font-size: 3rem;
-  font-style: italic;
-  text-align: center;
+main {
+  padding: 0 2rem;
 }
 
 .body-container {
@@ -14,13 +17,13 @@ main {
   gap: 2rem;
 }
 
-.cart-container {
+.items-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
 
-  .cart-item-li {
+  .item-li {
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -71,23 +74,11 @@ main {
   padding: 2rem 2rem;
   height: fit-content;
  
-  & form {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    & div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+ & h3 {
+  text-align: center;
+ }
 
-    & #delivery-date {
-      display: block;
-    }
-
-    & button {
-      margin-top: 1rem;
-    }
-  }
+ & a {
+  margin-top: 1rem;
+ }
 }

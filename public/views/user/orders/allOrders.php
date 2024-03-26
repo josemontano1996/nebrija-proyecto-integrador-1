@@ -7,10 +7,10 @@
 
 <body>
     <?php
-    $midHeader =  '<a href="/user/orders" class="italic bold">All</a>';
+    $midHeader =  "<a href='/user/orders'" . (!isset($_GET['status']) ? "class='italic bold underline'" : "") . ">All</a>";
 
     foreach (ORDER_STATUS as $status) {
-        $element = "<a " . (isset($_GET['status']) && ($status === $_GET['status']) ? "class='italic bold'" : "") . " href=\"/user/orders?status=$status\">" . ucfirst($status) . "</a>";
+        $element = "<a " . (isset($_GET['status']) && ($status === $_GET['status']) ? "class='italic bold underline'" : "") . " href=\"/user/orders?status=$status\">" . ucfirst($status) . "</a>";
 
         $midHeader = $midHeader . $element;
     }
@@ -18,31 +18,28 @@
     ?>
     <main>
         <h1>Your Orders</h1>
-        <div>
-
-
-        </div>
+       
         <ul id="orders-container">
             <?php foreach ($params[0] as $order) : ?>
                 <li>
-                    <h3>Order ID: <?= $order['id'] ?></h3>
+                    <h3>Order ID: <?= $order->getId() ?></h3>
                     <div class="flex">
 
                         <div>
-                            <p>Order Status:<strong> <?= $order['status'] ?></strong></p>
-                            <p>Order created in: <?= $order['created_at'] ?></p>
-                            <p>Delivery Date: <?= $order['delivery_date'] ?></p>
-                            <p>Total Price: <?= $order['total_price'] ?> &euro;</p>
+                            <p>Order Status:<strong> <?= $order->getStatus() ?></strong></p>
+                            <p>Order created in: <?= $order->getCreatedAt() ?></p>
+                            <p>Delivery Date: <?= $order->getDeliveryDate() ?></p>
+                            <p>Total Price: <?= $order->getTotalPrice(); ?> &euro;</p>
 
                         </div>
                         <div>
                             <h5>Delivery Address</h5>
-                            <p>Street: <?= $order['street'] ?></p>
-                            <p>Postal Code: <?= $order['postal'] ?></p>
-                            <p>City: <?= $order['city'] ?></p>
+                            <p>Street: <?= $order->getAddress()->getStreet(); ?></p>
+                            <p>Postal Code: <?= $order->getAddress()->getPostal(); ?></p>
+                            <p>City: <?= $order->getAddress()->getCity(); ?></p>
                         </div>
                         <div>
-                            <a class="btn-primary" href="/users/order?orderid=<?= $order['id'] ?>">More info</a>
+                            <a class="btn-primary" href="/user/order?orderid=<?= $order->getId(); ?>">More info</a>
 
                         </div>
                     </div>
