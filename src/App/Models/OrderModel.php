@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Cart\CartDataInitializer;
+use App\Models\Classes\AddressData;
 use App\Models\Classes\Order;
 use App\DAO\OrderDAO;
+use App\Models\Cart\CartProductData;
 
 /**
  * Represents an order in the application.
@@ -78,11 +80,20 @@ class OrderModel
      * @param string $userId The ID of the user.
      * @return Order[]|null An array of order objects if found, null otherwise.
      */
-    static public function getUserOrders(string $userId): ?array
+    static public function getUserOrders(string $userId, ?int $page = null, ?int $limit = 5): ?array
     {
         $orderDAO = new OrderDAO();
 
         $orders = $orderDAO->getOrdersByUserId($userId);
+
+        return $orders;
+    }
+
+    static public function getAllOrdersByStatus(string $status, ?int $page = null, ?int $limit = 5): ?array
+    {
+        $orderDAO = new OrderDAO();
+
+        $orders = $orderDAO->getAllOrdersByStatus($status, $page, $limit);
 
         return $orders;
     }
@@ -94,11 +105,20 @@ class OrderModel
      * @param string $status The status of the orders.
      * @return Order[]|null An array of order objects if found, null otherwise.
      */
-    static public function getUserOrdersByStatus(string $userId, string $status): ?array
+    static public function getUserOrdersByStatus(string $userId, string $status, ?int $page, ?int $limit): ?array
     {
         $orderDAO = new OrderDAO();
 
-        $orders = $orderDAO->getOrdersByUserIdAndStatus($userId, $status);
+        $orders = $orderDAO->getOrdersByUserIdAndStatus($userId, $status, $page, $limit);
+
+        return $orders;
+    }
+
+    static public function getAllOrders(?int $page = null, ?int $limit = 5): ?array
+    {
+        $orderDAO = new OrderDAO();
+
+        $orders = $orderDAO->getAllOrders($page, $limit);
 
         return $orders;
     }
@@ -117,5 +137,43 @@ class OrderModel
         $result = $orderDAO->cancelOrder($userId, $orderId);
 
         return $result;
+    }
+
+    /**
+     * Generate order data based on the given order data array.
+     *
+     * @param array $orderData The order data array fetched from the DB.
+     * @return Order[] The generated order data array.
+     */
+    static public function generateMultipleOrderDataFromDb(array $orderData): array
+    {
+        $products = [];
+
+        foreach ($orderData as $key => $order) {
+            $decodedProducts = json_decode($order['products'], true);
+
+            foreach ($decodedProducts as $product) {
+                $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
+            }
+
+            $orderData[$key] = new Order($order['user_id'], $order['user_name'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
+        }
+
+        return $orderData;
+    }
+    static public function generateOneOrderDataFromDb(array $orderData): Order
+    {
+        $products = [];
+
+        $decodedProducts = json_decode($orderData['products'], true);
+
+        foreach ($decodedProducts as $product) {
+            $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
+        }
+
+        $order = new Order($orderData['user_id'], $orderData['user_name'], new AddressData($orderData['street'], $orderData['city'], $orderData['postal'], $orderData['address_id']), $products, (float) $orderData['total_price'], $orderData['delivery_date'], $orderData['status'], $orderData['created_at'], $orderData['id']);
+
+
+        return $order;
     }
 }

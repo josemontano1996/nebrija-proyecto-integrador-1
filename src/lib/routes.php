@@ -40,6 +40,7 @@ $router->get('/user/order/cancel', [App\Controllers\OrderController::class, 'can
 
 
 //Admin routes
+$router->get('/admin/orders', [App\Controllers\Admin\AdminOrderController::class, 'getOrders']);
 $router->get('/admin/menu', [App\Controllers\Admin\AdminMenuController::class, 'getMenu']);
 
 $router->get('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'getNewProduct']);

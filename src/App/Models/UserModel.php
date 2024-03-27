@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Classes\DeliveryData;
 use App\Models\Classes\User;
 use App\DAO\UserDAO;
 
@@ -74,6 +73,12 @@ class UserModel extends User
         return $user;
     }
 
+    /**
+     * Retrieves user data by ID.
+     *
+     * @param string $userId The ID of the user.
+     * @return array|null Returns an array containing the user data if found, otherwise returns null.
+     */
     static public function getUserById(string $userId): ?array
     {
         $userDAO = new UserDAO();
@@ -82,6 +87,15 @@ class UserModel extends User
         return $userData;
     }
 
+    /**
+     * Updates user data.
+     *
+     * @param string $userId The ID of the user.
+     * @param string $name The new name of the user.
+     * @param string $email The new email of the user.
+     * @param string|null $password The new password of the user (optional).
+     * @return bool Returns true if the user data is successfully updated, false otherwise.
+     */
     static public function updateUser(string $userId, string $name, string $email, ?string $password): bool
     {
         $userDAO = new UserDAO();

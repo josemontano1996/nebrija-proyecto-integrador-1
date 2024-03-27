@@ -6,6 +6,7 @@ use App\DB;
 use App\Models\Cart\CartProductData;
 use App\Models\Classes\Order;
 use App\Models\Classes\AddressData;
+use App\Models\OrderModel;
 use mysqli;
 use Ramsey\Uuid\Uuid;
 
@@ -58,6 +59,38 @@ class OrderDAO
         return $result;
     }
 
+    public function getAllOrders(?int $page = null, ?int $limit = 5): ?array
+    {
+        $db = $this->db;
+
+        $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id ORDER BY delivery_date DESC";
+
+        if (isset($page)) {
+            $start = 0;
+            if ($page > 0) {
+                $start = ($page - 1) * $limit;
+            }
+            $sql = $sql . " LIMIT $start, $limit";
+        }
+
+
+        $stmt = $db->prepare($sql);
+
+        $result = $stmt->execute();
+
+        if (!$result) {
+            return null;
+        }
+
+        $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $orders = OrderModel::generateMultipleOrderDataFromDb($orders);
+
+        $stmt->close();
+
+        return $orders;
+    }
+
     /**
      * Retrieves an order by user ID and order ID.
      *
@@ -87,15 +120,7 @@ class OrderDAO
 
         $result = $stmt->get_result()->fetch_assoc();
 
-        $products = [];
-
-        $decodedProducts = json_decode($result['products'], true);
-
-        foreach ($decodedProducts as $product) {
-            $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
-        }
-
-        $order = new Order($result['user_id'], $result['user_name'], new AddressData($result['street'], $result['city'], $result['postal'], $result['address_id']), $products, (float) $result['total_price'], $result['delivery_date'], $result['status'], $result['created_at'], $result['id']);
+        $order = OrderModel::generateOneOrderDataFromDb($result);
 
         $stmt->close();
 
@@ -108,13 +133,21 @@ class OrderDAO
      * @param string $userId The ID of the user.
      * @return Order[]|null Returns an array of Order objects if found, null otherwise.
      */
-    public function getOrdersByUserId(string $userId): ?array
+    public function getOrdersByUserId(string $userId, ?int $page = null, ?int $limit = 5): ?array
     {
         $db = $this->db;
 
         $userId = $db->real_escape_string($userId);
 
         $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? ORDER BY created_at";
+
+         if (isset($page)) {
+            $start = 0;
+            if ($page > 0) {
+                $start = ($page - 1) * $limit;
+            }
+            $sql = $sql . " LIMIT $start, $limit";
+        }
 
         $stmt = $db->prepare($sql);
 
@@ -128,17 +161,7 @@ class OrderDAO
 
         $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        $products = [];
-
-        foreach ($orders as $key => $order) {
-            $decodedProducts = json_decode($order['products'], true);
-
-            foreach ($decodedProducts as $product) {
-                $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
-            }
-
-            $orders[$key] = new Order($order['user_id'], $order['user_name'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
-        }
+        $orders = OrderModel::generateMultipleOrderDataFromDb($orders);
 
         $stmt->close();
 
@@ -152,13 +175,22 @@ class OrderDAO
      * @param mixed $status The status of the orders.
      * @return Order[]|null Returns an array of Order objects if found, null otherwise.
      */
-    public function getOrdersByUserIdAndStatus(string $userId, $status): ?array
+    public function getOrdersByUserIdAndStatus(string $userId, string $status, ?int $page = null, ?int $limit = 5): ?array
     {
         $db = $this->db;
 
         $userId = $db->real_escape_string($userId);
+        $userId = $db->real_escape_string($status);
 
         $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? AND status = ? ORDER BY created_at";
+
+         if (isset($page)) {
+            $start = 0;
+            if ($page > 0) {
+                $start = ($page - 1) * $limit;
+            }
+            $sql = $sql . " LIMIT $start, $limit";
+        }
 
         $stmt = $db->prepare($sql);
         $stmt->bind_param('ss', $userId, $status);
@@ -170,17 +202,40 @@ class OrderDAO
 
         $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        $products = [];
+        $orders = OrderModel::generateMultipleOrderDataFromDb($orders);
 
-        foreach ($orders as $key => $order) {
-            $decodedProducts = json_decode($order['products'], true);
+        $stmt->close();
 
-            foreach ($decodedProducts as $product) {
-                $products[] = new CartProductData($product['id'], $product['name'], $product['quantity'], $product['price'], $product['type'], $product['image_url'], $product['description'], $product['min_servings']);
+        return $orders;
+    }
+    public function getAllOrdersByStatus(string $status, ?int $page = null, ?int $limit = 5): ?array
+    {
+        $db = $this->db;
+
+        $status = $db->real_escape_string($status);
+
+        $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE status = ? ORDER BY delivery_date DESC";
+
+         if (isset($page)) {
+            $start = 0;
+            if ($page > 0) {
+                $start = ($page - 1) * $limit;
             }
-
-            $orders[$key] = new Order($order['user_id'], $order['user_name'], new AddressData($order['street'], $order['city'], $order['postal'], $order['address_id']), $products, (float) $order['total_price'], $order['delivery_date'], $order['status'], $order['created_at'], $order['id']);
+            $sql = $sql . " LIMIT $start, $limit";
         }
+
+
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param('s',  $status);
+        $result = $stmt->execute();
+
+        if (!$result) {
+            return null;
+        }
+
+        $orders = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $orders = OrderModel::generateMultipleOrderDataFromDb($orders);
 
         $stmt->close();
 

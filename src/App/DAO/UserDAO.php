@@ -57,6 +57,13 @@ class UserDAO
 
         return $user;
     }
+
+    /**
+     * Retrieves a user from the database by user ID.
+     *
+     * @param string $user_id The ID of the user to retrieve.
+     * @return array|null The user data as an associative array, or null if no user is found.
+     */
     public function getUserById(string $user_id): ?array
     {
 
@@ -126,10 +133,18 @@ class UserDAO
         // Close the statement
         $statement->close();
 
-
         return $result;
     }
 
+    /**
+     * Updates an existing user in the database.
+     *
+     * @param string $user_id The ID of the user to update.
+     * @param string $name The new name of the user.
+     * @param string $email The new email of the user.
+     * @param string|null $password The new password of the user, or null to keep the existing password.
+     * @return bool True if the user was successfully updated, false otherwise.
+     */
     public function updateUser(string $user_id, string $name, string $email, ?string $password): bool
     {
 

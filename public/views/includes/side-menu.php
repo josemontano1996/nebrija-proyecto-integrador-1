@@ -65,7 +65,7 @@
                 </li>
                 <?php if ($_SESSION['user']['role'] === 'owner') : ?>
                     <li>
-                        <a href="/admin/users">
+                        <a href="/owner/users">
                             <img class="icon" src="/public/assets/icons/user-icon.svg" alt="account icon">
                             <span>Users</span>
                             </img>
