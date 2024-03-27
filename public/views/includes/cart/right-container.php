@@ -7,7 +7,7 @@
             <h4>Delivery Data</h4>
             <div>
                 <label for="user_name">Your name</label>
-                <input type="text" id="user_name" name="user_name" required>
+                <input type="text" id="user_name" name="user_name" value="<?= $params['user_name'] ?>" required>
             </div>
             <div>
                 <label for="street">Street</label>

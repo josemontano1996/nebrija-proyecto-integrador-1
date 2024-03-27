@@ -68,13 +68,7 @@ class UserModel extends User
 
         // Check if the passwords match
         if (password_verify($this->password, $userData['password'])) {
-
-            // Assign user ID
-            $user['id'] = $userData['id'];
-            // Assign user role if it exists
-            if (!empty($userData['role'])) {
-                $user['role'] = $userData['role'];
-            }
+            $user = $userData;
         }
 
         return $user;

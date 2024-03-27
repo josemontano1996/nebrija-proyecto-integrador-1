@@ -61,19 +61,19 @@ class UserDAO
     /**
      * Registers a new user in the database.
      *
-     * @param string $username The username of the new user.
+     * @param string $name The name of the new user.
      * @param string $email The email of the new user.
      * @param string $password The password of the new user.
      * @return bool True if the user was successfully registered, false otherwise.
      */
-    public function registerUser(string $username, string $email, string $password): bool
+    public function registerUser(string $name, string $email, string $password): bool
     {
 
         $db = $this->db;
 
         $id = Uuid::uuid4();
         // Prepare the SQL query with placeholders
-        $query = "INSERT INTO users (id, username, email, password) VALUES (? , ?, ?, ?)";
+        $query = "INSERT INTO users (id, name, email, password) VALUES (? , ?, ?, ?)";
 
         // Prepare the statement
         $statement = $db->prepare($query);
@@ -85,7 +85,7 @@ class UserDAO
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
         // Bind the parameters
-        $statement->bind_param('ssss', $id, $username, $email, $hashedPassword);
+        $statement->bind_param('ssss', $id, $name, $email, $hashedPassword);
 
         // Execute the statement
         $result = $statement->execute();

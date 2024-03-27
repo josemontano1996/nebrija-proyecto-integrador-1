@@ -9,7 +9,6 @@ CREATE TABLE users (
   password VARCHAR(60) NOT NULL,
   name VARCHAR(150) NULL,
   role VARCHAR(45) NULL,
-  address_id CHAR(36) DEFAULT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE addresses (
@@ -57,11 +56,6 @@ CREATE TABLE user_management (
 ) ENGINE=InnoDB;
 
 -- Add foreign keys using ALTER TABLE
-
-ALTER TABLE users
-  ADD CONSTRAINT fk_users_address
-  FOREIGN KEY (address_id) REFERENCES addresses(id);
-
 
 ALTER TABLE orders
   ADD CONSTRAINT fk_orders_user

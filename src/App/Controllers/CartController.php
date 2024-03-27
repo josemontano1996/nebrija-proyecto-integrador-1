@@ -25,7 +25,9 @@ class CartController
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();
 
-            return (new View('cart', ['products' => $cartProducts, 'totalPrice' => $totalPrice]))->render();
+            $user_name = $_SESSION['user']['name'] ?? null;
+
+            return (new View('cart', ['products' => $cartProducts, 'totalPrice' => $totalPrice, 'user_name' => $user_name]))->render();
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error while loading the cart. Please try again later.';
             http_response_code(500);

@@ -70,7 +70,6 @@ class AuthController
             $userInstance = new UserModel($email, $password);
             $user = $userInstance->login();
 
-
             if ($user) {
 
                 $cartDb = new CartDb($user['id'], new CartCookie());
@@ -81,6 +80,8 @@ class AuthController
                 }
 
                 $_SESSION['user']['id'] = $user['id'];
+                $_SESSION['user']['name'] = $user['name'];
+            
                 if (!empty($user['role'])) {
                     $_SESSION['user']['role'] = $user['role'];
                 }
