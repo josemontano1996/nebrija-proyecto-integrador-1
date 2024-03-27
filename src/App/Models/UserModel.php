@@ -73,4 +73,20 @@ class UserModel extends User
 
         return $user;
     }
+
+    static public function getUserById(string $userId): ?array
+    {
+        $userDAO = new UserDAO();
+        $userData = $userDAO->getUserById($userId);
+
+        return $userData;
+    }
+
+    static public function updateUser(string $userId, string $name, string $email, ?string $password): bool
+    {
+        $userDAO = new UserDAO();
+        $updateSuccesfull = $userDAO->updateUser($userId, $name, $email, $password);
+
+        return $updateSuccesfull;
+    }
 }

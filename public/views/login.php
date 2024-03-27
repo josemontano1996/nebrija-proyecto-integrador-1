@@ -41,7 +41,7 @@
                     <h1>Register</h1>
                     <div>
                         <label for="name">Name</label>
-                        <input type="text" id="username" name="username" minlength="2" placeholder="Antonio">
+                        <input type="text" id="username" name="username" minlength="2" placeholder="Antonio" required>
                     </div>
                     <div>
                         <label for="email-2">Email</label>
@@ -49,11 +49,11 @@
                     </div>
                     <div>
                         <label for="password-2">Password</label>
-                        <input type="password" id="password-2" name="password" minlength="8">
+                        <input type="password" id="password-2" name="password" minlength="8" required>
                     </div>
                     <div>
                         <label for="confirm-password">Confirm Passord</label>
-                        <input type="password" id="confirm-password" name="confirm_password" minlength=" 8">
+                        <input type="password" id="confirm-password" name="confirm_password" minlength=" 8" required>
                     </div>
 
                     <button type="submit" class="btn-primary centered">Submit</button>

@@ -29,7 +29,8 @@ $router->get('/logout', [App\Controllers\AuthController::class, 'getLogOut']);
 //Protected routes
 
 //User routes 
-
+$router->get('/user/account', [App\Controllers\User\UserController::class, 'getUserAccount']);
+$router->post('/user/account', [App\Controllers\User\UserController::class, 'updateUserAccount']);
 
 //Orders routes
 $router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder']);

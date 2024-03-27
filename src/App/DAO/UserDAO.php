@@ -57,6 +57,39 @@ class UserDAO
 
         return $user;
     }
+    public function getUserById(string $user_id): ?array
+    {
+
+        $db = $this->db;
+
+        // Sanitize the user_id input
+        $user_id = $db->real_escape_string($user_id);
+
+        // Construct the query using a prepared statement
+        $query = "SELECT * FROM users WHERE id = ?";
+        $statement = $db->prepare($query);
+
+        // Bind parameters and execute the query
+        $statement->bind_param('s', $user_id);
+        $statement->execute();
+
+        // Get the result
+        $result = $statement->get_result();
+
+        // Check if any rows were returned
+        if ($result->num_rows === 0) {
+            return null; // No user found
+        }
+
+        // Fetch the user data
+        $user = $result->fetch_assoc();
+
+        // Close the result set and statement
+        $result->close();
+        $statement->close();
+
+        return $user;
+    }
 
     /**
      * Registers a new user in the database.
@@ -93,6 +126,46 @@ class UserDAO
         // Close the statement
         $statement->close();
 
+
+        return $result;
+    }
+
+    public function updateUser(string $user_id, string $name, string $email, ?string $password): bool
+    {
+
+        $db = $this->db;
+
+        // Prepare the SQL query with placeholders
+        $query = "UPDATE users SET name = ?, email = ?";
+
+        // Check if the password is set
+        if (isset($password)) {
+            $query .= ", password = ?";
+        }
+
+        $query .= " WHERE id = ?";
+
+        // Prepare the statement
+        $statement = $db->prepare($query);
+        if (!$statement) {
+            return false;
+        }
+
+        // Hash the password
+        if (isset($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+            // Bind the parameters
+            $statement->bind_param('ssss', $name, $email, $hashedPassword, $user_id);
+        } else {
+            // Bind the parameters
+            $statement->bind_param('sss', $name, $email, $user_id);
+        }
+
+        // Execute the statement
+        $result = $statement->execute();
+
+        // Close the statement
+        $statement->close();
 
         return $result;
     }
