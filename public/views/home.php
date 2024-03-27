@@ -56,7 +56,7 @@
                     <p>
                         Indulge in a delightful culinary experience from the comfort of your own home with Manuelle's exclusive food delivery service. Experience the magic of having a skilled chef prepare and deliver exquisite, handcrafted meals right to your doorstep.
                     </p>
-                    <div>
+                    <div class="cta">
                         <a href="/menu" class="btn-primary">Check the Menu</a>
                     </div>
                 </article>
@@ -70,7 +70,7 @@
                     <p>
                         Manuelle offers a private chef service that caters to a range of events, including weddings, birthdays, and company meals. From intimate gatherings to large celebrations, she provides a personalized culinary experience that is tailored to your tastes and preferences.
                     </p>
-                    <div>
+                    <div class="cta">
                         <a href="/404" class="btn-primary">Book an Event</a>
                     </div>
                 </article>
@@ -85,7 +85,7 @@
                     <p>
                         Meet Chef Manuelle, a culinary virtuoso with over 25 years of culinary expertise. Her journey in the world of gastronomy has been nothing short of extraordinary. Having honed her skills in the most prestigious kitchens around the globe, she now stands at the threshold of a new culinary adventure.
                     </p>
-                    <div>
+                    <div class="cta">
                         <a href="/404" class="btn-primary">Book a Worskop</a>
                     </div>
                 </article>

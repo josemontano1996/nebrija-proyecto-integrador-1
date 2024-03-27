@@ -34,7 +34,7 @@ class OrderController
         }
 
         try {
-            $order = OrderModel::getOrderById($userId, $orderId);
+            $order = OrderModel::getUserOrderById($userId, $orderId);
 
             if (!$order) {
                 $_SESSION['error'] = 'Order not found.';
@@ -66,7 +66,7 @@ class OrderController
         }
     }
 
-    public function getOrder()
+    public function getUserOrder()
     {
         $userId = $_SESSION['user']['id'];
         $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
@@ -85,7 +85,7 @@ class OrderController
         }
 
         try {
-            $order = OrderModel::getOrderById($userId, $orderId);
+            $order = OrderModel::getUserOrderById($userId, $orderId);
 
             if (!$order) {
                 $_SESSION['error'] = 'Order not found.';
@@ -95,13 +95,13 @@ class OrderController
 
             return (new View('user/orders/order', [$order]))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
+            $_SESSION['error'] = 'An error ocurred.';
             header('Location: /user/orders');
             exit();
         }
     }
 
-    public function getOrders()
+    public function getUserOrders()
     {
         $userId = $_SESSION['user']['id'];
 
@@ -134,7 +134,7 @@ class OrderController
 
             return (new View('user/orders/allOrders', [$orders]))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
+            $_SESSION['error'] = 'An error ocurred.';
             header('Location: /menu');
             exit();
         }

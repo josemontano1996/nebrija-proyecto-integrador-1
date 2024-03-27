@@ -34,13 +34,16 @@ $router->post('/user/account', [App\Controllers\User\UserController::class, 'upd
 
 //Orders routes
 $router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder']);
-$router->get('/user/orders', [App\Controllers\OrderController::class, 'getOrders']);
-$router->get('/user/order', [App\Controllers\OrderController::class, 'getOrder']);
+$router->get('/user/orders', [App\Controllers\OrderController::class, 'getUserOrders']);
+$router->get('/user/order', [App\Controllers\OrderController::class, 'getUserOrder']);
 $router->get('/user/order/cancel', [App\Controllers\OrderController::class, 'cancelPendingOrder']);
 
 
 //Admin routes
 $router->get('/admin/orders', [App\Controllers\Admin\AdminOrderController::class, 'getOrders']);
+$router->get('/admin/order', [App\Controllers\Admin\AdminOrderController::class, 'getOrder']);
+$router->post('/admin/order/status', [App\Controllers\Admin\AdminOrderController::class, 'changeOrderStatus']);
+
 $router->get('/admin/menu', [App\Controllers\Admin\AdminMenuController::class, 'getMenu']);
 
 $router->get('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'getNewProduct']);

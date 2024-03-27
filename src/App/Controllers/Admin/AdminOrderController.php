@@ -9,6 +9,32 @@ use App\View;
 
 class AdminOrderController
 {
+    public function getOrder(): ?string
+    {
+        $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
+
+        if (!$orderId) {
+            $_SESSION['error'] = 'Order not found.';
+            header('Location: /user/orders');
+            exit();
+        }
+
+        try {
+            $order = OrderModel::getOrderById($orderId);
+
+            if (!$order) {
+                $_SESSION['error'] = 'Order not found.';
+                header('Location: /user/orders');
+                exit();
+            }
+
+            return (new View('admin/orders/adminOrder', [$order]))->render();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = 'An error ocurred.';
+            header('Location: /user/orders');
+            exit();
+        }
+    }
 
     public function getOrders(): ?string
     {
@@ -40,6 +66,35 @@ class AdminOrderController
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Error while loading the orders. Please try again later.';
             http_response_code(500);
+            header('Location: /admin/orders');
+            exit();
+        }
+    }
+
+    public function changeOrderStatus(): void
+    {
+        $orderId = isset($_POST['orderid']) ? $_POST['orderid'] : null;
+        $status = isset($_POST['status']) ? $_POST['status'] : null;
+
+        if (!$orderId || !$status) {
+            $_SESSION['error'] = 'Invalid data.';
+            header('Location: /admin/orders');
+            exit();
+        }
+
+        try {
+            $success = OrderModel::changeOrderStatus($orderId, $status);
+
+            if (!$success) {
+                $_SESSION['error'] = 'Error while changing the order status.';
+                header('Location: /admin/orders');
+                exit();
+            }
+
+            $_SESSION['success'] = 'Order status changed successfully.';
+            header('Location: /admin/order?orderid=' . $orderId);
+        } catch (\Exception $e) {
+            $_SESSION['error'] = 'An error ocurred.';
             header('Location: /admin/orders');
             exit();
         }

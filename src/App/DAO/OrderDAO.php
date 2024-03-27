@@ -91,6 +91,27 @@ class OrderDAO
         return $orders;
     }
 
+    public function changeOrderStatus(string $orderId, string $status): bool
+    {
+
+        $db = $this->db;
+
+        $orderId = $db->real_escape_string($orderId);
+        $status = $db->real_escape_string($status);
+
+        $sql = "UPDATE orders SET status = ? WHERE id = ?";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bind_param('ss', $status, $orderId);
+
+        $result = $stmt->execute();
+
+        $stmt->close();
+
+        return $result;
+    }
+
     /**
      * Retrieves an order by user ID and order ID.
      *
@@ -98,7 +119,7 @@ class OrderDAO
      * @param string $orderId The ID of the order.
      * @return Order|null Returns the Order object if found, null otherwise.
      */
-    public function getOrderById(string $userId, string $orderId): ?Order
+    public function getUserOrderById(string $userId, string $orderId): ?Order
     {
 
         $db = $this->db;
@@ -111,6 +132,33 @@ class OrderDAO
         $stmt = $db->prepare($sql);
 
         $stmt->bind_param('ss', $userId, $orderId);
+
+        $result = $stmt->execute();
+
+        if (!$result) {
+            return null;
+        }
+
+        $result = $stmt->get_result()->fetch_assoc();
+
+        $order = OrderModel::generateOneOrderDataFromDb($result);
+
+        $stmt->close();
+
+        return $order;
+    }
+    public function getOrderById(string $orderId): ?Order
+    {
+
+        $db = $this->db;
+
+        $orderId = $db->real_escape_string($orderId);
+
+        $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE orders.id = ?";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bind_param('s', $orderId);
 
         $result = $stmt->execute();
 
@@ -141,7 +189,7 @@ class OrderDAO
 
         $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? ORDER BY created_at";
 
-         if (isset($page)) {
+        if (isset($page)) {
             $start = 0;
             if ($page > 0) {
                 $start = ($page - 1) * $limit;
@@ -177,14 +225,14 @@ class OrderDAO
      */
     public function getOrdersByUserIdAndStatus(string $userId, string $status, ?int $page = null, ?int $limit = 5): ?array
     {
+
         $db = $this->db;
 
         $userId = $db->real_escape_string($userId);
-        $userId = $db->real_escape_string($status);
+        $status = $db->real_escape_string($status);
 
         $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? AND status = ? ORDER BY created_at";
-
-         if (isset($page)) {
+        if (isset($page)) {
             $start = 0;
             if ($page > 0) {
                 $start = ($page - 1) * $limit;
@@ -216,7 +264,7 @@ class OrderDAO
 
         $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE status = ? ORDER BY delivery_date DESC";
 
-         if (isset($page)) {
+        if (isset($page)) {
             $start = 0;
             if ($page > 0) {
                 $start = ($page - 1) * $limit;

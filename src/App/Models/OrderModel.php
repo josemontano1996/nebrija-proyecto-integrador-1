@@ -58,6 +58,14 @@ class OrderModel
         return $result;
     }
 
+    static public function getOrderById(string $orderId): ?Order
+    {
+        $orderDAO = new OrderDAO();
+        
+        $order = $orderDAO->getOrderById( $orderId);
+        
+        return $order;
+    }
     /**
      * Retrieves an order by its ID.
      *
@@ -65,11 +73,11 @@ class OrderModel
      * @param string $orderId The ID of the order.
      * @return Order|null The order object if found, null otherwise.
      */
-    static public function getOrderById(string $userId, string $orderId): ?Order
+    static public function getUserOrderById(string $userId, string $orderId): ?Order
     {
         $orderDAO = new OrderDAO();
 
-        $order = $orderDAO->getOrderById($userId,  $orderId);
+        $order = $orderDAO->getUserOrderById($userId,  $orderId);
 
         return $order;
     }
@@ -105,7 +113,7 @@ class OrderModel
      * @param string $status The status of the orders.
      * @return Order[]|null An array of order objects if found, null otherwise.
      */
-    static public function getUserOrdersByStatus(string $userId, string $status, ?int $page, ?int $limit): ?array
+    static public function getUserOrdersByStatus(string $userId, string $status, ?int $page = null, ?int $limit = 5): ?array
     {
         $orderDAO = new OrderDAO();
 
@@ -121,6 +129,15 @@ class OrderModel
         $orders = $orderDAO->getAllOrders($page, $limit);
 
         return $orders;
+    }
+
+    static public function changeOrderStatus(string $orderId, string $status): bool
+    {
+        $orderDAO = new OrderDAO();
+
+        $result = $orderDAO->changeOrderStatus($orderId, $status);
+
+        return $result;
     }
 
     /**

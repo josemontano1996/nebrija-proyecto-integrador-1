@@ -81,13 +81,17 @@
     grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 2rem;
+
     & article {
       & p {
         font-size: 1.2rem;
         margin: 1rem 0 2rem 0;
       }
-      & div {
-        text-align: center;
+
+      & .cta {
+        display: flex;
+
+        justify-content: center;
       }
     }
 
