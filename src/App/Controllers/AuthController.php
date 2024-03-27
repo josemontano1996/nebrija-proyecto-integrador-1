@@ -81,7 +81,7 @@ class AuthController
 
                 $_SESSION['user']['id'] = $user['id'];
                 $_SESSION['user']['name'] = $user['name'];
-            
+
                 if (!empty($user['role'])) {
                     $_SESSION['user']['role'] = $user['role'];
                 }
@@ -186,18 +186,15 @@ class AuthController
 
             $cartDb = new CartDb($userId, new CartCookie());
 
-            $userHasCart = $cartDb->loadCart();
+            $cartDb->saveCart();
 
-            if ($userHasCart) {
-                $cartDb->saveCart();
-            }
 
             CartCookie::destroyCartCookie();
 
             session_destroy();
             header('Location: /login?success=Logged out successfully');
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'An error occurred';
+            $_SESSION['error'] = $e->getMessage();
             http_response_code(500);
             header('Location: /');
             exit();

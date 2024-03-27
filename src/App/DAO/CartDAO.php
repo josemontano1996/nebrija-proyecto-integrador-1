@@ -108,7 +108,7 @@ class CartDAO
         $db = $this->db;
 
         // Prepare the statement with placeholder
-        $sql = "DELETE FROM carts WHERE id = ?";
+        $sql = "DELETE FROM carts WHERE user_id = ?";
 
         $stmt = $db->prepare($sql);
 
