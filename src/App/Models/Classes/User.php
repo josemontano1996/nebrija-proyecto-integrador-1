@@ -32,4 +32,59 @@ class User
         $this->role = $role;
         $this->id = $id;
     }
+
+    /**
+     * Get the user's email address.
+     *
+     * @return string The user's email address.
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Get the user's password.
+     *
+     * @return string The user's password.
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Get the user's name.
+     *
+     * @return string|null The user's name.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the user's role.
+     *
+     * @return string|null The user's role.
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Get the user's ID.
+     *
+     * @return string|null The user's ID.
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
 }

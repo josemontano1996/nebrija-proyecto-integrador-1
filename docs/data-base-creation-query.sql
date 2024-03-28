@@ -47,12 +47,12 @@ CREATE TABLE carts (
 ) ENGINE=InnoDB;
 
 CREATE TABLE user_management (
-  manager_id CHAR(36),
+  owner_id CHAR(36),
   user_id CHAR(36),
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  previous_role VARCHAR(50) NOT NULL,
-  new_role VARCHAR(50) NOT NULL,
-  PRIMARY KEY (manager_id, user_id, date) -- Composite primary key
+  previous_role VARCHAR(50) NULL,
+  new_role VARCHAR(50) NULL,
+  PRIMARY KEY (owner_id, user_id, date) -- Composite primary key
 ) ENGINE=InnoDB;
 
 -- Add foreign keys using ALTER TABLE

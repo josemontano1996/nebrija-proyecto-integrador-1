@@ -72,20 +72,20 @@ class AuthController
 
             if ($user) {
 
-                $cartDb = new CartDb($user['id'], new CartCookie());
+                $cartDb = new CartDb($user->getId(), new CartCookie());
                 $dbCartData = $cartDb->loadCart();
 
                 if ($dbCartData) {
                     CartCookie::createCartCookie($dbCartData);
                 }
 
-                $_SESSION['user']['id'] = $user['id'];
-                $_SESSION['user']['name'] = $user['name'];
+                $_SESSION['user']['id'] = $user->getId();
+                $_SESSION['user']['name'] = $user->getName();
 
-                if (!empty($user['role'])) {
-                    $_SESSION['user']['role'] = $user['role'];
+                if (!empty($user->getRole())) {
+                    $_SESSION['user']['role'] = $user->getRole();
                 }
-                if ($user['role'] === 'admin' || $user['role'] === 'owner') {
+                if ($user->getRole() === 'admin' || $user->getRole() === 'owner') {
                     header('Location: /admin/menu');
                 } else {
                     header('Location: /menu');

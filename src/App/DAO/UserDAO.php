@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\DAO;
 
 use App\DB;
+use App\Models\Classes\User;
+use App\Models\UserModel;
 use mysqli;
 use Ramsey\Uuid\Uuid;
 
@@ -18,13 +20,44 @@ class UserDAO
         $this->db = $dbInstance->getDb();
     }
 
+    public function getAllUsers(?int $page = null, ?int $limit = 5): ?array
+    {
+        $db = $this->db;
+
+        $sql = "SELECT users.id, users.email, users.name, users.role FROM users";
+
+        if (isset($page)) {
+            $start = 0;
+            if ($page > 0) {
+                $start = ($page - 1) * $limit;
+            }
+            $sql = $sql . " LIMIT $start, $limit";
+        }
+
+        $stm = $db->prepare($sql);
+
+        $result = $stm->execute();
+
+        if (!$result) {
+            return null;
+        }
+
+        $usersData = $stm->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $users = UserModel::generateUsersDataFromDb($usersData);
+
+        $stm->close();
+
+        return $users;
+    }
+
     /**
      * Retrieves a user from the database by email.
      *
      * @param string $email The email of the user to retrieve.
-     * @return array|null The user data as an associative array, or null if no user is found.
+     * @return User|null The user data as an associative array, or null if no user is found.
      */
-    public function getUserByEmail(string $email): ?array
+    public function getUserByEmail(string $email): ?User
     {
 
         $db = $this->db;
@@ -50,6 +83,8 @@ class UserDAO
 
         // Fetch the user data
         $user = $result->fetch_assoc();
+
+        $user = new User($user['email'], $user['password'], $user['name'], $user['role'], $user['id']);
 
         // Close the result set and statement
         $result->close();

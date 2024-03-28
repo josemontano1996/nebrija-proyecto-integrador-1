@@ -50,9 +50,9 @@ class UserModel extends User
     /**
      * Performs a login operation for the user.
      *
-     * @return array|null Returns an array containing the user data if login is successful, otherwise returns null.
+     * @return User|null Returns an array containing the user data if login is successful, otherwise returns null.
      */
-    public function login(): ?array
+    public function login(): ?User
     {
         // Retrieve user data from the database
         $userDAO = new UserDAO();
@@ -66,23 +66,39 @@ class UserModel extends User
         $user = null;
 
         // Check if the passwords match
-        if (password_verify($this->password, $userData['password'])) {
+        if (password_verify($this->password, $userData->getPassword())) {
             $user = $userData;
         }
 
         return $user;
     }
 
+    static public function getAllUsers(?int $page = null, ?int $limit = 5): ?array
+    {
+        $userDAO = new UserDAO();
+        $users = $userDAO->getAllUsers($page, $limit);
+
+        return $users;
+    }
+
     /**
      * Retrieves user data by ID.
      *
      * @param string $userId The ID of the user.
-     * @return array|null Returns an array containing the user data if found, otherwise returns null.
+     * @return User|null Returns an array containing the user data if found, otherwise returns null.
      */
-    static public function getUserById(string $userId): ?array
+    static public function getUserById(string $userId): ?User
     {
         $userDAO = new UserDAO();
         $userData = $userDAO->getUserById($userId);
+
+        return $userData;
+    }
+
+    static public function getUserByEmail(string $email): ?User
+    {
+        $userDAO = new UserDAO();
+        $userData = $userDAO->getUserByEmail($email);
 
         return $userData;
     }
@@ -102,5 +118,25 @@ class UserModel extends User
         $updateSuccesfull = $userDAO->updateUser($userId, $name, $email, $password);
 
         return $updateSuccesfull;
+    }
+
+   
+    static public function generateUsersDataFromDb(array $usersData): array
+    {
+        $users = [];
+        foreach ($usersData as $userData) {
+            $user = new User($userData['email'], '', $userData['name'], $userData['role'], $userData['id']);
+            $users[] = $user;
+        }
+        return $users;
+    }
+
+    static public function sortUsersAlphabeticallyByEmail($users): array
+    {
+        usort($users, function ($a, $b) {
+            return $a->getEmail() <=> $b->getEmail();
+        });
+
+        return $users;
     }
 }
