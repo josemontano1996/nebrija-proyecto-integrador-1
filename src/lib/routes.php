@@ -56,8 +56,11 @@ $router->delete('/admin/product/delete', [App\Controllers\Admin\AdminMenuControl
 //Owner routes
 $router->get('/owner/users', [App\Controllers\Owner\OwnerUserController::class, 'getUsers']);
 $router->get('/owner/user/search', [App\Controllers\Owner\OwnerUserController::class, 'searchUser']);
-$router->post('/owner/user/role', [App\Controllers\Owner\OwnerUserController::class, 'updateUserRole']);
+$router->post('/owner/user/role', [App\Controllers\Owner\OwnerUserManagementController::class, 'updateUserRole']);
 
+
+$router->get('/owner/user/management', [App\Controllers\Owner\OwnerUserManagementController::class, 'getManagementLogs']);
+$router->get('/owner/user/management/search', [App\Controllers\Owner\OwnerUserManagementController::class, 'getLogsByUserEmail']);
 
 //This is the line that is going to resolve the route and send the result to the client
 echo $router->resolve($_SERVER['REQUEST_URI'], strtolower($_SERVER['REQUEST_METHOD']));

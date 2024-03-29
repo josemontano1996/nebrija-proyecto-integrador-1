@@ -9,18 +9,36 @@ class UserManagementModel
 
     static public function updateUserRole(string $owner_id, string $user_id, string $role): bool
     {
-        $userDAO = new UserManagementDAO();
+        $userManagementDAO = new UserManagementDAO();
 
-        $previous_role = $userDAO->getUserRole($user_id);
+        $previous_role = $userManagementDAO->getUserRole($user_id);
 
-        $updateUserRole = $userDAO->updateUserRole($owner_id, $user_id, $role);
+        $updateUserRole = $userManagementDAO->updateUserRole($owner_id, $user_id, $role);
 
         if (!$updateUserRole) {
             return false;
         }
 
-        $updateSuccesfull = $userDAO->saveUserManagementOperation($owner_id, $user_id, $role, $previous_role);
+        $updateSuccesfull = $userManagementDAO->saveUserManagementOperation($owner_id, $user_id, $role, $previous_role);
 
         return $updateSuccesfull;
+    }
+
+    static public function getManagementLogs(int $page = null, int $limit = 5): ?array
+    {
+        $userManagementDAO = new UserManagementDAO();
+
+        $user_management_logs = $userManagementDAO->getManagementLogs($page, $limit);
+
+        return $user_management_logs;
+    }
+
+    static public function getLogsByUserEmail(string $email): ?array
+    {
+        $userManagementDAO = new UserManagementDAO();
+
+        $logs = $userManagementDAO->getLogsByUserEmail($email);
+
+        return $logs;
     }
 }

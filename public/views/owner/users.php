@@ -43,7 +43,7 @@
                             <td><?= $user->getId() ?></td>
                             <td class="<?= $user->getRole() === 'owner' ? 'owner' : ($user->getRole() === 'admin' ? 'admin' : '') ?>"><?= $user->getRole() ?></td>
 
-                            <td class="user-info-a"><a class="btn-secondary" href="/owner/user/search?email=<?= $user->getEmail(); ?>">More info</a></td>
+                            <td class="user-info-a"><a class="btn-secondary" href="/owner/user/search?email=<?= urlencode($user->getEmail()); ?>">More info</a></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
