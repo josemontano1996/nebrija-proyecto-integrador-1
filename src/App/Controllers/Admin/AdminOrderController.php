@@ -11,8 +11,7 @@ class AdminOrderController
 {
     public function getOrder(): ?string
     {
-        $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
-
+        $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;;
         if (!$orderId) {
             $_SESSION['error'] = 'Order not found.';
             header('Location: /user/orders');

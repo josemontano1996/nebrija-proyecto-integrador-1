@@ -9,6 +9,26 @@ h1 {
   justify-content: center;
 }
 
+.heading {
+  & h1 {
+    font-size: 3rem;
+    font-style: italic;
+    text-align: center;
+  }
+  & .page-selector {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem auto;
+  }
+  & form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.2rem;
+  }
+}
 #orders-container {
   display: flex;
   flex-direction: column;

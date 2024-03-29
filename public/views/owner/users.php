@@ -16,7 +16,7 @@
             <h1 id="page-title">User management</h1>
             <?php require_once __DIR__ . '/../includes/owner/user-page-selector.php'; ?>
 
-            <form action="user/search" method="GET">
+            <form action="/owner/user/search" method="GET">
                <label for="email">User Email:</label>
                <input type="text" id="email" name ="email" required>
                <button class="btn-primary">Search User</button>

@@ -57,22 +57,49 @@ class OwnerUserManagementController
         }
     }
 
-   
+
     public function getManagementLogs(): string
     {
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        try {
 
-        $logs = UserManagementModel::getManagementLogs($page, 20);
+            $logs = UserManagementModel::getManagementLogs($page, 20);
 
-        return (new View('owner/user-management-logs', [$logs, $page]))->render();
+            if (!$logs) {
+                $_SESSION['error'] = 'No logs found';
+                http_response_code(404);
+                header('Location: /owner/users');
+                exit();
+            }
+
+            return (new View('owner/user-management-logs', [$logs, $page]))->render();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = 'An error ocurred.';
+            http_response_code(500);
+            header('Location: /');
+            exit();
+        }
     }
 
     public function getLogsByUserEmail(): string
     {
         $email = urldecode($_GET['email']) ?? '';
+        try {
 
-        $logs = UserManagementModel::getLogsByUserEmail($email);
+            $logs = UserManagementModel::getLogsByUserEmail($email);
+            if (!$logs) {
 
-        return (new View('owner/logs-user', [$logs, $email]))->render();
+                $_SESSION['error'] = 'No logs found';
+                http_response_code(404);
+                header('Location: /owner/user/management');
+                exit();
+            }
+            return (new View('owner/logs-user', [$logs, $email]))->render();
+        } catch (\Exception $e) {
+            $_SESSION['error'] = 'An error ocurred.';
+            http_response_code(500);
+            header('Location: /');
+            exit();
+        }
     }
 }
