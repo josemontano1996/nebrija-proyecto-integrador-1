@@ -66,4 +66,5 @@ class View
         include $viewPath;
         return (string) ob_get_clean();
     }
+
 }

@@ -13,7 +13,7 @@ use App\Exceptions\RouteNotFoundException;
  */
 class Router
 {
-    private array $routes;
+    private array $routes = [];
 
     /**
      * Register a route and its corresponding action.
