@@ -36,16 +36,12 @@ class ViewTest extends TestCase
         $view->render();
     }
 
-    public function test_it_passes_parameters_to_view(): void
+    public function test_params_is_accestible_in_view(): void
     {
-        // Given a view instance with parameters
-        $view = new View('home', ['hello']);
+        $view = new View('testing', ['Jane Doe']);
 
-        // When we render the view
-        $output = $view->render();
+        $renderedView = $view->render();
 
-        // Then the output should contain the parameter values
-        $this->assertStringContainsString('hello', $output);
-       
+        $this->assertStringContainsString('Jane Doe', $renderedView);
     }
 }
