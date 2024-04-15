@@ -22,11 +22,11 @@
                     <h1>Update Data </h1>
                     <div>
                         <label for="name">Name</label>
-                        <input type="text" id="username" name="username" minlength="2" value="<?= $user['name'] ?>" required>
+                        <input type="text" id="username" name="username" minlength="2" value="<?= $user->getName() ?>" required>
                     </div>
                     <div>
                         <label for="email-2">Email</label>
-                        <input type="email" id="email-2" name="email" value="<?= $user['email'] ?>" required>
+                        <input type="email" id="email-2" name="email" value="<?= $user->getEmail() ?>" required>
                     </div>
                     <div class="divider"></div>
                     <h4>Update password &lpar; optional &rpar;</h4>

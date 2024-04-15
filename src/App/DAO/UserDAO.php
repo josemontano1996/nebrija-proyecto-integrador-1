@@ -97,9 +97,9 @@ class UserDAO
      * Retrieves a user from the database by user ID.
      *
      * @param string $user_id The ID of the user to retrieve.
-     * @return array|null The user data as an associative array, or null if no user is found.
+     * @return User|null The user data as an associative array, or null if no user is found.
      */
-    public function getUserById(string $user_id): ?array
+    public function getUserById(string $user_id): ?User
     {
 
         $db = $this->db;
@@ -125,6 +125,8 @@ class UserDAO
 
         // Fetch the user data
         $user = $result->fetch_assoc();
+
+        $user = new User($user['email'], $user['password'], $user['name'], $user['role'], $user['id']);
 
         // Close the result set and statement
         $result->close();
