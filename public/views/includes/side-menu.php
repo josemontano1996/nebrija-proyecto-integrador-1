@@ -50,6 +50,13 @@
             <h4>Admin section</h4>
             <ul>
                 <li>
+                    <a href="/user/account">
+                        <img class="icon" src="/public/assets/icons/user-icon.svg" alt="account icon">
+                        <span>Account</span>
+                        </img>
+                    </a>
+                </li>
+                <li>
                     <a href="/admin/orders">
                         <img class="icon" src="/public/assets/icons/bag-icon.svg" alt="cart icon">
                         <span>Orders</span>
