@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="/src/front/css/menu.css">
 <script type="module" src="/src/front/scripts/menu/add-to-cart.js" defer></script>
+<script type="module" src="/src/front/scripts/menu/x-draggable-container.js" defer></script>
 
 <title>Menu page</title>
 </head>
@@ -47,11 +48,12 @@
                 </li>
             </ul>
         </section>
+        <div class='divider' style='margin-top: 6rem' ;></div>
         <section>
             <?php foreach ($params as $type => $categoryProducts) : ?>
                 <div class="menu-section">
                     <h2><?= ucfirst($type) ?></h2>
-                    <ul class="menu-list">
+                    <ul class="menu-list dragable">
                         <?php foreach ($categoryProducts as $product) : ?>
                             <li class="menu-list-item" id="<?= $product['id'] ?>">
                                 <header>
