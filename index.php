@@ -17,8 +17,8 @@ session_start();
 use App\View;
 
 define('ROOT_PATH', __DIR__);
-define('VIEW_PATH', __DIR__ . '/public/views');
-define('STORAGE_PATH', __DIR__ . '/public/assets/storage');
+define('VIEW_PATH', __DIR__ . '/src/front/views');
+define('STORAGE_PATH', __DIR__ . '/src/front/assets/storage');
 
 try {
     //Requiring the router file
