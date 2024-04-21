@@ -130,8 +130,8 @@ main {
           gap: 2rem;
           justify-content: space-around;
 
-          & input {
-            width: 100px;
+          & .quantity-input {
+            width: 50px;
           }
         }
       }
@@ -168,6 +168,20 @@ main {
   .dragable {
     & .menu-list-item {
       width: 350px;
+    }
+  }
+
+  .menu-section {
+    & .menu-list {
+      & .menu-list-item {
+        & footer {
+          & .add-form {
+            & .quantity-input {
+              width: 100px;
+            }
+          }
+        }
+      }
     }
   }
 }

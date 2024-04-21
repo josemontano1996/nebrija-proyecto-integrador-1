@@ -63,15 +63,15 @@
                                 </header>
                                 <footer>
 
-                                <p>Price: <span class="price-tag"><?= $product['price'] ?> &euro;</span></p>
-                                <?php if ($product['min_servings'] > 0) : ?>
-                                    <p>Minimum servings: <?= $product['min_servings'] ?></p>
-                                <?php endif; ?>
-                                <form class="add-form">
-                                    <input type="hidden" name="id" value="<?= $product['id'] ?>">
-                                    <input type="hidden" name="min_servings" value="<?= $product['min_servings'] ?>">
-                                    <label for="quantity">Quantity</label>
-                                    <input type="number" id="quantity" name="quantity" min="0" required>
+                                    <p>Price: <span class="price-tag"><?= $product['price'] ?> &euro;</span></p>
+                                    <?php if ($product['min_servings'] > 0) : ?>
+                                        <p>Minimum servings: <?= $product['min_servings'] ?></p>
+                                    <?php endif; ?>
+                                    <form class="add-form">
+                                        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+                                        <input type="hidden" name="min_servings" value="<?= $product['min_servings'] ?>">
+                                        <label for="quantity">Quantity</label>
+                                        <input class='quantity-input' type="number" id="quantity" name="quantity" min="0" required>
 
                                         <button class="btn-primary">Add</button>
                                     </form>
