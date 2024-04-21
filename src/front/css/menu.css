@@ -1,6 +1,68 @@
 main {
   padding: 0 2rem;
 }
+
+#menu-page-header {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+  & #text-content {
+    z-index: 10;
+    position: absolute;
+    top: 28%;
+    left: 0;
+    background-color: white;
+    padding-left: 2rem;
+    padding-right: 1rem;
+    & h1 {
+      font-size: 1.7rem;
+    }
+    & h2 {
+      font-size: 1.4rem;
+    }
+  }
+  & img {
+    z-index: 0;
+    width: 100%;
+    object-fit: cover;
+    height: 40vh;
+  }
+}
+
+#advantages-section {
+  margin: 1rem 0;
+  text-align: center;
+  & ul {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-items: center;
+    gap: 2rem;
+    & li {
+      display: flex;
+      flex-direction: column;
+      width: 250px;
+      text-align: center;
+      align-items: center;
+      gap: 0.5rem;
+      & img {
+        width: 24px;
+        height: 24px;
+      }
+      & h4 {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        font-weight: 500;
+        font-style: italic;
+      }
+      & p {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+      }
+    }
+  }
+}
+
 .menu-section {
   padding: 2rem 0;
   & h2 {
@@ -52,9 +114,62 @@ main {
           justify-content: space-around;
 
           & input {
-           width:100px;
+            width: 100px;
           }
         }
+      }
+    }
+  }
+}
+
+/* sm */
+@media (min-width: 640px) {
+  #menu-page-header {
+    position: relative;
+    width: 100%;
+    padding: 1rem 0;
+    & #text-content {
+      padding: auto 0.5rem;
+      & h1 {
+        font-size: 2.5rem;
+      }
+      & h2 {
+        font-size: 1.7rem;
+      }
+    }
+    & img {
+      height: 60vh;
+    }
+  }
+
+  #advantages-section {
+    & ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+/* md */
+@media (min-width: 768px) {
+
+}
+
+/* lg */
+@media (min-width: 1024px) {
+  #menu-page-header {
+    & #text-content {
+      padding-left: 7vw;
+    }
+    & img {
+      height: 70vh;
+    }
+  }
+
+  #advantages-section {
+    & ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      & li:nth-last-child(1) {
+        display: none;
       }
     }
   }
