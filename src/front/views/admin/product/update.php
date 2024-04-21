@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/../../includes/shared-head.php'; ?>
 
-<link rel="stylesheet" href="/public/css/admin/update-product.css">
-<script src="/public/scripts/admin/update-product.js" defer></script>
+<link rel="stylesheet" href="/src/public/css/admin/update-product.css">
+<script src="/src/front/scripts/admin/update-product.js" defer></script>
 
 <title>Chef Manuelle Webpage</title>
 </head>

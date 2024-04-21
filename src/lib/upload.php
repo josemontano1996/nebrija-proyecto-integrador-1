@@ -15,7 +15,7 @@ function uploadImage(array $image): string
     $storagePath = STORAGE_PATH . '/' . uniqid() . '-' . $image['name'];
     move_uploaded_file($image['tmp_name'], $storagePath);
 
-    $filePath = '/public' . explode('public', $storagePath)[1];
+    $filePath = '/src' . explode('src', $storagePath)[1];
 
     return $filePath;
 }
