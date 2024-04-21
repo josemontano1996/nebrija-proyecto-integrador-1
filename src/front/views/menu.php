@@ -48,7 +48,7 @@
             </ul>
         </section>
         <section>
-           <!--  <?php foreach ($params as $type => $categoryProducts) : ?>
+            <?php foreach ($params as $type => $categoryProducts) : ?>
                 <div class="menu-section">
                     <h2><?= ucfirst($type) ?></h2>
                     <ul class="menu-list">
@@ -78,7 +78,7 @@
                         <?php endforeach; ?>
                     </ul>
                 </div>
-            <?php endforeach; ?> -->
+            <?php endforeach; ?>
         </section>
     </main>
     <?php require_once __DIR__ . '/includes/footer.php';

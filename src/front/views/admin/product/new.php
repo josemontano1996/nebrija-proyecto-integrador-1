@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/../../includes/shared-head.php'; ?>
 
-<script src="/public/scripts/admin/post-new-product.js" defer></script>
+<script src="/src/front/scripts/admin/post-new-product.js" defer></script>
 
 <title>Chef Manuelle Webpage</title>
 </head>
