@@ -9,9 +9,9 @@
 <body>
     <?php
     $midHeader =
-        '<li><a id="chef-scroll">The Chef</a></li>
-    <li><a id="experience-scroll">The Experience</a></li>
-    <li><a href="/menu">The Menu</a></li>';
+        '<li class="italic"><a id="chef-scroll">The Chef</a></li>
+    <li class="italic"><a id="experience-scroll">The Experience</a></li>
+    <li class="italic"><a href="/menu">The Menu</a></li>';
 
     echo createHeader($midHeader);
     ?>
@@ -19,14 +19,14 @@
         <section id="hero">
             <div id="hero-text">
                 <h1>A healthy meal delivered to your door, every single day</h1>
-                <p>The smart 365-days-year food subscription that will make you eat healthy again. Tailored to your personal tastes and nutritional needs.</p>
+                <h6>The smart 365-days-year food subscription that will make you eat healthy again. Tailored to your personal tastes and nutritional needs.</h6>
                 <div id="hero-buttons">
                     <a class="btn-primary" href="/menu">Check the Menu</a>
                 </div>
             </div>
             <div>
                 <img src=" /src/front/assets/imgs/hero-image.webp" alt="hero-image">
-                </div>
+            </div>
         </section>
         <section id="chef">
             <h2>The Chef</h2>
@@ -38,7 +38,7 @@
                     <h3>
                         Chef Manuelle: A culinary journey</h3>
                     <p>Meet Chef Manuelle, a culinary virtuoso with over 25 years of culinary expertise. Her journey in the world of gastronomy has been nothing short of extraordinary. Having honed her skills in the most prestigious kitchens around the globe, she now stands at the threshold of a new culinary adventure.</p>
-                    <p>Now, Chef Manuelle embarks on a new standalone project, bringing her unparalleled passion and expertise directly to you. Her dedication to culinary excellence remains unwavering as she introduces a range of experiences on this webpage that reflect her commitment to culinary innovation and the art of food.</p>
+                    <p id="second-p">Now, Chef Manuelle embarks on a new standalone project, bringing her unparalleled passion and expertise directly to you. Her dedication to culinary excellence remains unwavering as she introduces a range of experiences on this webpage that reflect her commitment to culinary innovation and the art of food.</p>
                     <div id="chef-buttons">
                         <a href="/" class="btn-secondary">Check my Instagram</a>
                     </div>
@@ -52,6 +52,9 @@
                     <h3>
                         Chef-curated food delivered to you
                     </h3>
+                    <div class="exp-small-img">
+                        <img src="/src/front/assets/imgs/home-img-1.webp" alt="focaccia">
+                    </div>
                     <p>
                         Indulge in a delightful culinary experience from the comfort of your own home with Manuelle's exclusive food delivery service. Experience the magic of having a skilled chef prepare and deliver exquisite, handcrafted meals right to your doorstep.
                     </p>
@@ -66,6 +69,9 @@
                     <h3>
                         Private chef for your favourite events
                     </h3>
+                    <div class="exp-small-img">
+                        <img src="/src/front/assets/imgs/home-img-2.webp" alt="focaccia">
+                    </div>
                     <p>
                         Manuelle offers a private chef service that caters to a range of events, including weddings, birthdays, and company meals. From intimate gatherings to large celebrations, she provides a personalized culinary experience that is tailored to your tastes and preferences.
                     </p>
@@ -81,6 +87,9 @@
                     <h3>
                         Cooking Classes and Demonstrations
                     </h3>
+                    <div class="exp-small-img">
+                        <img src="/src/front/assets/imgs/home-img-3.webp" alt="focaccia">
+                    </div>
                     <p>
                         Meet Chef Manuelle, a culinary virtuoso with over 25 years of culinary expertise. Her journey in the world of gastronomy has been nothing short of extraordinary. Having honed her skills in the most prestigious kitchens around the globe, she now stands at the threshold of a new culinary adventure.
                     </p>

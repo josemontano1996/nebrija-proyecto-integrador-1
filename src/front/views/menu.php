@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="/src/front/css/menu.css">
 <script type="module" src="/src/front/scripts/menu/add-to-cart.js" defer></script>
+<script type="module" src="/src/front/scripts/menu/button-scroll-menu-page.js" defer></script>
 <script type="module" src="/src/front/scripts/menu/x-draggable-container.js" defer></script>
 
 <title>Menu page</title>
@@ -9,7 +10,8 @@
 
 <body>
     <?php
-    echo createHeader();
+    $midHeader = '<li class="italic"><a id="menu-scroll">The Menu</a></li>';
+    echo createHeader($midHeader);
     ?>
     <main>
         <header id='menu-page-header'>
@@ -49,7 +51,7 @@
             </ul>
         </section>
         <div class='divider' style='margin-top: 6rem' ;></div>
-        <section>
+        <section id="menu">
             <?php foreach ($params as $type => $categoryProducts) : ?>
                 <div class="menu-section">
                     <h2><?= ucfirst($type) ?></h2>
