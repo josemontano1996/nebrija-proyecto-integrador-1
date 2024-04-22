@@ -1,4 +1,5 @@
 #side-menu {
+  z-index: 99;
   position: fixed;
   top: 2rem;
   right: 0;

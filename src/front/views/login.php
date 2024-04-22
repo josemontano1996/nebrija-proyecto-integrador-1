@@ -1,8 +1,7 @@
 <?php require_once __DIR__ . '/includes/shared-head.php'; ?>
 
 <link rel="stylesheet" href="/src/front/css/login.css">
-<script src="/src/front/scripts/home/buttons-scroll.js" defer></script>
-
+<script src="/src/front/scripts/auth/form-displays.js" defer></script>
 <title>Login page</title>
 </head>
 
@@ -31,13 +30,13 @@
 
                     <button type="submit" class="btn-primary centered">Submit</button>
 
+                    <a id="open-register-form">Not registered yet?</a>
                 </form>
             </section>
 
 
             <section>
-
-                <form class="form" method="POST" action="/register">
+                <form class="form" id="register-form" method="POST" action="/register">
                     <h1>Register</h1>
                     <div>
                         <label for="name">Name</label>
@@ -57,7 +56,7 @@
                     </div>
 
                     <button type="submit" class="btn-primary centered">Submit</button>
-
+                    <a id="open-log-in">Want to log in?</a>
                 </form>
             </section>
 
