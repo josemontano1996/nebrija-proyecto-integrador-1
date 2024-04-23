@@ -45,8 +45,7 @@ class ProductDAO
         $products = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach ($products as $key => $product) {
-            $products[$key]['price'] = (float) $product['price'];
-            $products[$key]['min_servings'] = (int) $product['min_servings'];
+            $products[$key] = new Product($product['name'], $product['description'], (float)$product['price'], $product['type'], $product['image_url'], (int) $product['min_servings'], $product['id']);
         }
 
         return $products;
@@ -80,6 +79,7 @@ class ProductDAO
         $query = "INSERT INTO products (id, name, description, min_servings, price, type, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $statement = $db->prepare($query);
+
         if (!$statement) {
             return false;
         }
@@ -99,9 +99,9 @@ class ProductDAO
      * 
      * @param string $productId The ID of the product.
      * 
-     * @return array<Product>|null The product data as an associative array, or null if the product is not found.
+     * @return Product|null The product data as an associative array, or null if the product is not found.
      */
-    public function getProductById(string $productId): ?array
+    public function getProductById(string $productId): ?Product
     {
         $db = $this->db;
 
@@ -123,13 +123,20 @@ class ProductDAO
         // Fetch the product data
         $product = $result->fetch_assoc();
 
+        if (!$product) {
+            $statement->close();
+            return null;
+        }
+
         // Close the result set and statement
         $result->close();
         $statement->close();
 
-        $product['price'] = (float) $product['price'];
-        $product['min_servings'] = (int) $product['min_servings'];
 
+
+        $product = new Product($product['name'], $product['description'], (float)$product['price'], $product['type'], $product['image_url'], (int) $product['min_servings'], $product['id']);
+
+    
         return $product;
     }
 
@@ -160,6 +167,7 @@ class ProductDAO
         $query = "UPDATE products SET name = ?, description = ?, min_servings = ?, price = ?, type = ? , image_url = ? WHERE id = ?";
 
         $statement = $db->prepare($query);
+
         if (!$statement) {
             return false;
         }
@@ -170,7 +178,7 @@ class ProductDAO
 
         // Close the statement
         $statement->close();
-      
+
         return $result;
     }
 

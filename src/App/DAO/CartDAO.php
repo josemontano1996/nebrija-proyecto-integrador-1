@@ -39,6 +39,10 @@ class CartDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return null;
+        }
+
         // Bind the user ID parameter securely
         $stmt->bind_param('s', $user_id);
 
@@ -82,6 +86,10 @@ class CartDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return false;
+        }
+
         // Bind the parameters securely
         $stmt->bind_param('sss', $user_id, $products, $products);
 
@@ -111,6 +119,10 @@ class CartDAO
         $sql = "DELETE FROM carts WHERE user_id = ?";
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
 
         // Bind the user ID parameter securely
         $stmt->bind_param('s', $user_id);

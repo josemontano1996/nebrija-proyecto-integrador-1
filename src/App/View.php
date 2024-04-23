@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
+
 use App\Exceptions\ViewNotFoundException;
+use App\Models\Classes\CustomClass;
 
 /**
  * Class View
@@ -25,15 +27,15 @@ class View
      *
      * @var array
      */
-    protected array $params;
+    protected array | CustomClass $params;
 
     /**
      * Create a new View instance.
      *
      * @param string $view The path to the view file.
-     * @param array $params The parameters to be passed to the view.
+     * @param array|CustomClass $params The parameters to be passed to the view.
      */
-    public function __construct(string $view, array $params = [])
+    public function __construct(string $view, array|CustomClass $params = [])
     {
         $this->view = $view;
         $this->params = $params;
@@ -56,7 +58,7 @@ class View
         // Extracting the parameters so they are available in the view with a variable variable
 
         $params = $this->params;
-
+      
         /*  foreach ($this->params as $key => $value) {
             $$key = $value;
         } */
@@ -66,5 +68,4 @@ class View
         include $viewPath;
         return (string) ob_get_clean();
     }
-
 }

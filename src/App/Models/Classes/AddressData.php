@@ -8,7 +8,7 @@ namespace App\Models\Classes;
 /**
  * The AddressData class is an Classes class that represents delivery data.
  */
-class AddressData
+class AddressData 
 {
     /**
      * @var string $street The street address for the delivery.

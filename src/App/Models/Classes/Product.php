@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Classes;
 
+
+
 /**
  * The Product class represents a generic product.
  */
-class Product
+class Product extends CustomClass
 {
     /**
      * Create a new Product instance.
@@ -37,7 +39,10 @@ class Product
         $this->min_servings = $min_servings;
         $this->id = $id;
     }
-    
+
+
+
+
     /**
      * Get the name of the product.
      *

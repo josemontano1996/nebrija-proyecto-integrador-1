@@ -48,12 +48,17 @@ class OrderDAO
         $sql = "INSERT INTO orders (id,  user_id, user_name, address_id, products, total_price, status, delivery_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
+
         $stmt->bind_param('sssssdss', $order_id, $user_id, $user_name, $address_id, $jsonProducts, $total_price, $status, $delivery_date);
-        
+
         $result = $stmt->execute();
-        
+
         $stmt->close();
-      
+
         return $result;
     }
 
@@ -74,9 +79,14 @@ class OrderDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return null;
+        }
+
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
@@ -100,6 +110,10 @@ class OrderDAO
         $sql = "UPDATE orders SET status = ? WHERE id = ?";
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
 
         $stmt->bind_param('ss', $status, $orderId);
 
@@ -129,11 +143,16 @@ class OrderDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return null;
+        }
+
         $stmt->bind_param('ss', $userId, $orderId);
 
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
@@ -156,16 +175,25 @@ class OrderDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return null;
+        }
+
         $stmt->bind_param('s', $orderId);
 
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
         $result = $stmt->get_result()->fetch_assoc();
 
+        if (!$result) {
+            $stmt->close();
+            return null;
+        }
         $order = OrderModel::generateOneOrderDataFromDb($result);
 
         $stmt->close();
@@ -197,11 +225,16 @@ class OrderDAO
 
         $stmt = $db->prepare($sql);
 
+        if (!$stmt) {
+            return null;
+        }
+
         $stmt->bind_param('s', $userId);
 
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
@@ -239,10 +272,16 @@ class OrderDAO
         }
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return null;
+        }
+
         $stmt->bind_param('ss', $userId, $status);
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
@@ -272,10 +311,16 @@ class OrderDAO
 
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return null;
+        }
+
         $stmt->bind_param('s',  $status);
         $result = $stmt->execute();
 
         if (!$result) {
+            $stmt->close();
             return null;
         }
 
@@ -305,6 +350,10 @@ class OrderDAO
         $sql = "UPDATE orders SET status = 'cancelled' WHERE user_id = ? AND id = ?";
 
         $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
 
         $stmt->bind_param('ss', $userId, $orderId);
 

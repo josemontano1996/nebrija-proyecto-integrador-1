@@ -60,13 +60,13 @@ class ProductModel extends Product
      * @param array<string> $ids An array of product IDs.
      * @return  array{products: Product[], not_found: bool} An array containing the products and a boolean indicating if any product was not found.
      */
-    static public function getProductsByIds(array $ids):array
+    static public function getProductsByIds(array $ids): array
     {
 
         $productDAO = new ProductDAO();
 
         $result = $productDAO->getProductsByIds($ids);
-        
+
         return $result;
     }
 
@@ -76,11 +76,11 @@ class ProductModel extends Product
      * @param string $productId The ID of the product.
      * @return array|null The retrieved product or null if not found.
      */
-    static public function getProductById(string $productId): ?array
+    static public function getProductById(string $productId): ?Product
     {
         $productDAO = new ProductDAO();
         $product = $productDAO->getProductById($productId);
-
+        
         return $product;
     }
 
@@ -97,7 +97,7 @@ class ProductModel extends Product
         $sortedByType = [];
 
         foreach (DISHES_TYPES as $type) {
-            $typeProducts = array_filter($products, fn ($product) => $product['type'] === $type);
+            $typeProducts = array_filter($products, fn ($product) => $product->getType() === $type);
             $sortedByType[$type] = $typeProducts;
         }
 
