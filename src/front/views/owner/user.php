@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . '/../includes/shared-head.php'; ?>
-<?php require_once __DIR__ . '/../../../src/const/consts.php'; ?>
+<?php require_once __DIR__ . '/../../../const/consts.php'; ?>
 <link rel="stylesheet" href="/src/front/css/owner/users/user.css">
 
 

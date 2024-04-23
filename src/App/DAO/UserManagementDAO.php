@@ -63,11 +63,11 @@ class UserManagementDAO
             return null;
         }
 
-        $role = $stmt->get_result()->fetch_assoc();
+        $result = $stmt->get_result()->fetch_assoc();
 
         $stmt->close();
 
-        return $role['role'];
+        return $result['role'];
     }
 
     public function saveUserManagementOperation(string $owner_id, string $user_id, string $new_role, ?string $previous_role): bool
@@ -159,7 +159,7 @@ class UserManagementDAO
         }
 
         $stmt->close();
-    
+
         return $logs;
     }
 }

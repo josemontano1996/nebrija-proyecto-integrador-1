@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\View;
+use App\ServerErrorLog;
 use App\Models\ProductModel;
+use App\ResponseStatus;
 
 /**
  * The BaseController class is responsible for handling the main functionalities of the application.
@@ -20,6 +22,7 @@ class BaseController
      */
     public function getHomePage(): string
     {
+        // Render the home page view
         return (new View('home'))->render();
     }
 
@@ -31,20 +34,20 @@ class BaseController
     public function getMenu(): ?string
     {
         try {
-
+            // Get all products from the database
             $products = ProductModel::getAllByType();
 
             if (empty($products)) {
-                $_SESSION['error'] = 'No products found.';
-                http_response_code(404);
-                header('Location: /');
+                // If no products are found, return a 404 error
+                ResponseStatus::sendResponseStatus(404, 'No products found.');
             }
 
+            // Render the view with the products
             return (new View('menu', $products))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'Error while loading the menu. Please try again later.';
-            http_response_code(500);
-            header('Location: /');
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'Error while loading the menu. Please try again later.');
         }
     }
 }

@@ -6,8 +6,11 @@ namespace App\Controllers;
 
 require_once ROOT_PATH . '/src/lib/validation.php';
 
+use App\AuthSession;
 use App\Models\Cart\CartCookie;
 use App\Models\Cart\CartDb;
+use App\ResponseStatus;
+use App\ServerErrorLog;
 use App\View;
 use App\Models\UserModel;
 
@@ -22,12 +25,11 @@ class AuthController
      *
      * @return string The rendered login view.
      */
-    public function getLogIn(): string
+    public function getLogIn(): ?string
     {
-        if (isset($_SESSION['user'])) {
-            http_response_code(302);
-            header('Location: /menu');
-            exit();
+        if (AuthSession::isLoggedIn()) {
+            // Redirect to the menu page if the user is already logged in
+            ResponseStatus::sendResponseStatus(302, 'You are already logged in', '/menu');
         } else {
             return (new View('login'))->render();
         }
@@ -41,66 +43,57 @@ class AuthController
     public function postLogIn(): void
     {
         // Checking if user is already logged in
-        if (isset($_SESSION['user'])) {
-            $_SESSION['error'] = 'You are already logged in';
-            http_response_code(403);
-            header('Location: /login');
-            exit();
+        if (AuthSession::isLoggedIn()) {
+            // Redirect to the menu page if the user is already logged in
+            ResponseStatus::sendResponseStatus(302, 'You are already logged in', '/menu');
         }
 
+        // Input validation
         $email = trim($_POST['email']);
         $password = $_POST['password'];
 
         if (!isValidEmail($email)) {
-            $_SESSION['error'] = 'Insert a valid email';
-            http_response_code(401);
-            header('Location: /login');
-            exit();
+            ResponseStatus::sendResponseStatus(401, 'Insert a valid email', '/login');
         }
 
         if (empty($password) || !strlen($password) >= 8) {
-            $_SESSION['error'] = 'Insert a valid password';
-            http_response_code(401);
-            header('Location: /login');
-            exit();
+            ResponseStatus::sendResponseStatus(401, 'Insert a valid password', '/login');
         }
 
         try {
-
+            // Process login
             $userInstance = new UserModel($email, $password);
             $user = $userInstance->login();
 
             if ($user) {
-
+                // Load the cart from the database into the cookie
                 $cartDb = new CartDb($user->getId(), new CartCookie());
                 $dbCartData = $cartDb->loadCart();
 
                 if ($dbCartData) {
+                    // Create a new cart cookie with the data from the database
                     CartCookie::createCartCookie($dbCartData);
                 }
 
-                $_SESSION['user']['id'] = $user->getId();
-                $_SESSION['user']['name'] = $user->getName();
+                // Save the user in the session
+                $authSession = new AuthSession($user);
+                $authSession->save();
 
-                if (!empty($user->getRole())) {
-                    $_SESSION['user']['role'] = $user->getRole();
-                }
                 if ($user->getRole() === 'admin' || $user->getRole() === 'owner') {
-                    header('Location: /admin/menu');
+                    // Redirect to the admin menu if the user is an admin or owner
+                    ResponseStatus::sendResponseStatus(200, null, '/admin/menu');
                 } else {
-                    header('Location: /menu');
+                    // Redirect to the menu page if the user is a regular user
+                    ResponseStatus::sendResponseStatus(200, null, '/menu');
                 }
             } else {
-                $_SESSION['error'] = 'Invalid email or password';
-                http_response_code(401);
-                header('Location: /login');
-                exit();
+                // Redirect to the login page with an error message if the login failed
+                ResponseStatus::sendResponseStatus(401, 'Invalid email or password', '/login');
             }
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'An error occurred, try again later';
-            http_response_code(500);
-            header('Location: /login');
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error occurred, try again later', '/login');
         }
     }
 
@@ -113,65 +106,49 @@ class AuthController
     {
         // Checking if user is already logged in
         if (isset($_SESSION['user'])) {
-            $_SESSION['error'] = 'You are already logged in';
-            http_response_code(403);
-            header('Location: /login');
-            exit();
+            ResponseStatus::sendResponseStatus(403, 'You are already logged in', '/login');
         }
 
+        // Input validation
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
         $password = $_POST['password'];
         $confirm_password = $_POST['confirm_password'];
 
-        // Input validation
+
         if (!isValidString($username, 3)) {
-            $_SESSION['error'] = 'Insert a valid name';
-            http_response_code(401);
-            header('Location: /login');
-            exit();
+            ResponseStatus::sendResponseStatus(401, 'Insert a valid name', '/login');
         }
 
         if (!isValidEmail($email)) {
-            $_SESSION['error'] = 'Insert a valid email';
-            http_response_code(401);
-            header('Location: /login?error=Invalid email');
-            exit();
+            ResponseStatus::sendResponseStatus(401, 'Insert a valid email', '/login');
         }
 
         if (empty($password) || !strlen($password) >= 8 || $password !== $confirm_password) {
-            $_SESSION['error'] = 'Insert a valid password, or validate your passwords';
-            http_response_code(401);
-            header('Location: /login');
-            exit();
+            ResponseStatus::sendResponseStatus(401, 'Insert a valid password, or validate your passwords', '/login');
         }
 
         // Process registration
         try {
-
-
+            // Register the user
             $userInstance = new UserModel($email, $password, $username);
             $result = $userInstance->register();
 
             if (!$result) {
-                $_SESSION['error'] = 'An error occurred';
-                http_response_code(500);
-                header('Location: /login');
-                exit();
+                // Redirect to the login page with an error message if the registration failed
+                ResponseStatus::sendResponseStatus(500, 'An error occurred', '/login');
             }
 
-            header('Location: /login?success=User registered successfully');
+            // Redirect to the login page with a success message if the registration was successful
+            ResponseStatus::sendResponseStatus(200, 'User registered successfully', '/login');
         } catch (\Exception $e) {
+            // Log the error and return the error message
+            ServerErrorLog::logError($e);
+
             if ($e->getCode() === 1062) {
-                $_SESSION['error'] = 'User already exists';
-                http_response_code(403);
-                header('Location: /login');
-                exit();
+                ResponseStatus::sendResponseStatus(403, 'User already exists', '/login');
             } else {
-                $_SESSION['error'] = 'An error occurred';
-                http_response_code(500);
-                header('Location: /login');
-                exit();
+                ResponseStatus::sendResponseStatus(500, 'An error occurred', '/login');
             }
         }
     }
@@ -181,23 +158,26 @@ class AuthController
      */
     public function getLogOut(): void
     {
-        $userId = $_SESSION['user']['id'];
+        // Checking if user is not logged in
+        $userId = AuthSession::getUserId();
+
         try {
-
+            // Save the cart cookie in the database
             $cartDb = new CartDb($userId, new CartCookie());
-
             $cartDb->saveCart();
 
-
+            // Destroy the the cart cookie
             CartCookie::destroyCartCookie();
 
-            session_destroy();
-            header('Location: /login?success=Logged out successfully');
+            // Destroy the authentication session
+            AuthSession::destroy();
+
+            // Redirect to the login page with a success message
+            ResponseStatus::sendResponseStatus(200, 'You have been logged out', '/login');
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
-            http_response_code(500);
-            header('Location: /');
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error occurred', '/login');
         }
     }
 }

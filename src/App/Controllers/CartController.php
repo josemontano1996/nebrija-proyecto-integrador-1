@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\AuthSession;
 use App\Models\Cart\CartDataInitializer;
+use App\ResponseStatus;
+use App\ServerErrorLog;
 use App\View;
 
 /**
@@ -21,17 +24,20 @@ class CartController
     public function getCart(): ?string
     {
         try {
+            // Get the products from the cart
             $cart = new CartDataInitializer();
             $cartProducts = $cart->getProducts();
             $totalPrice = $cart->getTotalPrice();
 
-            $user_name = $_SESSION['user']['name'] ?? null;
+            // Get the user name from the session
+            $user_name = AuthSession::getUserName();
 
+            // Render the view with the cart products and total price
             return (new View('cart', ['products' => $cartProducts, 'totalPrice' => $totalPrice, 'user_name' => $user_name]))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'Error while loading the cart. Please try again later.';
-            http_response_code(500);
-            header('Location: /menu');
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'Error while loading the cart. Please try again later.');
         }
     }
 }

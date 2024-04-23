@@ -33,7 +33,7 @@ $router->get('/user/account', [App\Controllers\User\UserController::class, 'getU
 $router->post('/user/account', [App\Controllers\User\UserController::class, 'updateUserAccount']);
 
 //Orders routes
-$router->post('/user/order', [App\Controllers\OrderController::class, 'postOrder']);
+$router->post('/user/order', [App\Controllers\OrderController::class, 'postOrderAjax']);
 $router->get('/user/orders', [App\Controllers\OrderController::class, 'getUserOrders']);
 $router->get('/user/order', [App\Controllers\OrderController::class, 'getUserOrder']);
 $router->get('/user/order/cancel', [App\Controllers\OrderController::class, 'cancelPendingOrder']);

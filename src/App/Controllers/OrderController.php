@@ -6,209 +6,232 @@ namespace App\Controllers;
 
 require_once __DIR__ .  '/../../lib/data-validation.php';
 
+use App\AuthSession;
 use App\Models\AddressModel;
 use App\Models\Cart\CartCookie;
 use App\Models\Cart\CartDataInitializer;
 use App\Models\OrderModel;
+use App\ResponseStatus;
+use App\ServerErrorLog;
 use App\View;
 
+/**
+ * Class OrderController
+ * 
+ * This class handles the logic for managing orders.
+ */
 class OrderController
 {
-
+    /**
+     * Cancels a pending order.
+     *
+     * @return void
+     */
     public function cancelPendingOrder()
     {
-        $userId = $_SESSION['user']['id'];
+        // Get the user ID from the session
+        $userId = AuthSession::getUserId();
+        // Get the order ID
         $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
 
         if (!$userId) {
-            $_SESSION['error'] = 'Session not found. Log in again.';
-            $_SESSION['user'] = null;
-            header('Location: /login');
-            exit();
+            // If the user is not logged in, redirect to the login page
+            ResponseStatus::sendResponseStatus(401, 'You must be logged in to cancel an order.', '/login');
         }
 
         if (!$orderId) {
-            $_SESSION['error'] = 'Order not found.';
-            header('Location: /user/orders');
-            exit();
+            // If the order ID is not set, redirect to the orders page
+            ResponseStatus::sendResponseStatus(400, 'Order not found.', '/user/orders');
         }
 
         try {
+            // Get the order data
             $order = OrderModel::getUserOrderById($userId, $orderId);
 
             if (!$order) {
-                $_SESSION['error'] = 'Order not found.';
-                header('Location: /user/orders');
-                exit();
+                // If the order is not found, redirect to the orders page
+                ResponseStatus::sendResponseStatus(400, 'Order not found.', '/user/orders');
             }
 
             if ($order->getStatus() !== 'pending') {
-                $_SESSION['error'] = 'Order cannot be cancelled.';
-                header('Location: /user/orders');
-                exit();
+                // If the order is not pending, redirect to the orders page
+                ResponseStatus::sendResponseStatus(400, 'Order is not pending, cannot be cancelled.', '/user/orders');
             }
 
+            // Cancel the order (only if the status is pending)
             $success = OrderModel::cancelOrder($userId, $orderId);
 
             if (!$success) {
-                $_SESSION['error'] = 'Order could not be cancelled.';
-                header('Location: /user/orders');
-                exit();
+                // If the order could not be cancelled, return a 500 error
+                ResponseStatus::sendResponseStatus(500, 'Order could not be cancelled.', '/user/orders');
             }
 
-            $_SESSION['success'] = 'Order cancelled successfully.';
-            header('Location: /user/orders?orderid=' . $orderId);
-            exit();
+            // Redirect to the order page
+            $order_url = '/user/orders?orderid=' . $orderId;
+            ResponseStatus::sendResponseStatus(200, 'Order cancelled successfully.', $order_url);
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
-            header('Location: /user/orders');
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error ocurred.', '/user/orders');
         }
     }
 
-    public function getUserOrder()
+    /**
+     * Retrieves an order from an user and renders the view.
+     *
+     * @return string|null The rendered order view.
+     */
+    public function getUserOrder(): ?string
     {
-        $userId = $_SESSION['user']['id'];
+        // Get the user ID from the session
+        $userId = AuthSession::getUserId();
+        // Get the order ID
         $orderId = isset($_GET['orderid']) ? $_GET['orderid'] : null;
 
         if (!$userId) {
-            $_SESSION['error'] = 'Session not found. Log in again.';
-            $_SESSION['user'] = null;
-            header('Location: /login');
-            exit();
+            // If the user is not logged in, redirect to the login page
+            ResponseStatus::sendResponseStatus(401, 'You must be logged in to view an order.', '/login');
         }
 
         if (!$orderId) {
-            $_SESSION['error'] = 'Order not found.';
-            header('Location: /user/orders');
-            exit();
+            // If the order ID is not set, redirect to the orders page
+            ResponseStatus::sendResponseStatus(400, 'Order not found.', '/user/orders');
         }
 
         try {
+            // Get the order data
             $order = OrderModel::getUserOrderById($userId, $orderId);
 
             if (!$order) {
-                $_SESSION['error'] = 'Order not found.';
-                header('Location: /user/orders');
-                exit();
+                // If the order is not found, redirect to the orders page
+                ResponseStatus::sendResponseStatus(400, 'Order not found.', '/user/orders');
             }
 
+            // Render the view with the order data
             return (new View('user/orders/order', [$order]))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'An error ocurred.';
-            header('Location: /user/orders');
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error ocurred.', '/user/orders');
         }
     }
 
-    public function getUserOrders()
+    /**
+     * Retrieves the orders information and renders the orders view.
+     *
+     * @return string|null The rendered view of all orders.
+     */
+    public function getUserOrders(): ?string
     {
-        $userId = $_SESSION['user']['id'];
+        // Get the user ID from the session
+        $userId = AuthSession::getUserId();
 
         if (!$userId) {
-            $_SESSION['error'] = 'Session not found. Log in again.';
-            $_SESSION['user'] = null;
-            header('Location: /login');
-            exit();
+            // If the user is not logged in, redirect to the login page
+            ResponseStatus::sendResponseStatus(401, 'You must be logged in to view orders.', '/login');
         }
         try {
+            //Initialize the orders array
             $orders = [];
 
+            //If there is no status query, get all orders
             if (!isset($_GET['status'])) {
+                // Get all user orders
                 $orders = OrderModel::getUserOrders($userId);
                 if (!$orders) {
-                    $_SESSION['error'] = 'No orders found.';
-                    header('Location: /menu');
-                    exit();
+                    // If no orders are found, return a 404 error
+                    ResponseStatus::sendResponseStatus(400, 'No orders found.', '/menu');
                 }
             } else {
+                // Get user orders by status
                 $status = $_GET['status'];
+                // Get the orders by status
                 $orders = OrderModel::getUserOrdersByStatus($userId, $status);
                 if (!$orders) {
-                    $_SESSION['error'] = 'No orders found.';
-                    header('Location: /user/orders');
-                    exit();
+                    // If no orders are found, return a 404 error
+                    ResponseStatus::sendResponseStatus(400, 'No orders found.', '/user/orders');
                 }
             }
-
-
+            // Render the view with the orders
             return (new View('user/orders/allOrders', [$orders]))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'An error ocurred.';
-            header('Location: /menu');
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error ocurred.', '/menu');
         }
     }
-    public function postOrder(): void
+
+    /**
+     * Handles the AJAX request to place an order.
+     *
+     * @return void
+     */
+    public function postOrderAjax(): void
     {
-        $userId = $_SESSION['user']['id'];
+        // Get the user ID from the session
+        $userId = AuthSession::getUserId();
 
         if (!$userId) {
-            http_response_code(401);
-            echo json_encode('You must be logged in to place an order.');
-            exit();
+            // If the user is not logged in, return a 401 error
+            ResponseStatus::sendResponseStatus(401, 'You must be logged in to place an order.', '/login', true);
         }
+
+        // Get the form data
         $user_name = trim($_POST['user_name']);
         $street = trim($_POST['street']);
         $postal = trim($_POST['postal']);
         $city = trim($_POST['city']);
         $delivery_date = $_POST['delivery_date'];
 
-        $order_data = json_decode($_COOKIE['cart']);
+        // Get the cart data from the cookie
+        $order_data = CartCookie::getCartFromCookie();
 
-
+        //Validate inputs
         if ($delivery_date < date('Y-m-d H:i:s')) {
-            http_response_code(400);
-            echo json_encode('Invalid date.');
-            exit();
+            ResponseStatus::sendResponseStatus(400, 'Invalid date.', '/cart', true);
         }
 
         if (!$order_data) {
-            http_response_code(400);
-            echo json_encode('No order data.');
-            exit();
+            // If there is no order data, return a 400 error
+            ResponseStatus::sendResponseStatus(400, 'No order data.', '/cart', true);
         }
 
+        // Check if the delivery data is invalid
         $isInvalidData = isInvalidDeliveryData($user_name, $street, $postal, $city, $delivery_date);
 
         if ($isInvalidData) {
-            http_response_code(400);
-            echo json_encode($isInvalidData);
-            exit();
+            // If the delivery data is invalid, return a 400 error
+            ResponseStatus::sendResponseStatus(400, $isInvalidData, '/cart', true);
         }
 
         try {
-
+            // Save the address data
             $addressModel = new AddressModel($street, $city, $postal,);
             $addressId = $addressModel->saveAddressData();
-            //TODO:add order model with address data and rest of data, add the dao and so on
+
             if (!$addressId) {
-                http_response_code(500);
-                echo json_encode('An error ocurred. Try again later.');
-                exit();
+                // If the address could not be saved, return a 500 error
+                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
             }
 
+            // Save the order data
             $orderModel = new OrderModel($userId, $user_name, $addressId, new CartDataInitializer(), $delivery_date);
-
             $success = $orderModel->saveOrderData();
 
-
             if (!$success) {
+                // If the order could not be saved, return a 500 error and delete the stored address
                 $addressModel->deleteAddressData($addressId);
-
-                http_response_code(500);
-                echo json_encode('An error ocurred. Try again later.');
-                exit();
+                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
             }
 
+            // Clear the cart cookie
             CartCookie::destroyCartCookie();
-
-            echo json_encode('/user/orders');
-            exit();
+            // Redirect to the orders page
+            ResponseStatus::sendResponseStatus(200, null, '/user/orders', true);
         } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode($e->getMessage());
-            exit();
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
         }
     }
 }
