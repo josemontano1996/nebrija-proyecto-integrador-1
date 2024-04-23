@@ -8,48 +8,52 @@ require_once __DIR__ .  '/../../../../src/lib/upload.php';
 require_once __DIR__ .  '/../../../const/consts.php';
 require_once __DIR__ .  '/../../../lib/data-validation.php';
 
+use App\ResponseStatus;
 use App\View;
 use App\Models\ProductModel;
+use App\ServerErrorLog;
 
 class AdminMenuController
 {
     public function getMenu(): ?string
     {
         try {
-
+            // Get all products from the database
             $products = ProductModel::getAllByType();
-
+            // Render the view with the products
             return (new View('admin/menu/adminMenu', $products))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = 'Error while loading the menu. Please try again later.';
-            http_response_code(500);
-            header('Location: /admin/menu');
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'Error while loading the menu. Please try again later.', '/admin/menu');
         }
     }
 
     public function getUpdateProduct(): ?string
     {
         try {
+            // Get the product id from the GET request
             $productId = $_GET['productId'];
 
+            // Get the product by id
             $product = ProductModel::getProductById($productId);
 
             if (!$product) {
-                $_SESSION['error'] = 'Product not found.';
-                http_response_code(404);
-                header('Location: /admin/menu');
+                // If no product is found, return a 404 error
+                ResponseStatus::sendResponseStatus(404, 'Product not found', '/admin/menu');
             }
-
+            // Render the view with the product
             return (new View('admin/product/update', $product))->render();
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e;
-            http_response_code(500);
-            header('Location: /admin/menu');
+            // Log the error and return a 500 error
+            ServerErrorLog::logError($e);
+            ResponseStatus::sendResponseStatus(500, 'Error while loading the product. Please try again later.', '/admin/menu');
         }
     }
 
-    public function postUpdateProduct(): void
+    public function postUpdateProductAjax(): void
     {
+        // Get the product data from the POST request
         $id =  $_POST['id'];
         $name = trim($_POST['name']);
         $description = trim($_POST['description']);
@@ -58,7 +62,8 @@ class AdminMenuController
         $type = $_POST['type'];
         $old_image_url = $_POST['old_image_url'];
         $new_image = ($_FILES['new_image']['size'] > 0) ? $_FILES['new_image'] : null;
-        
+
+        // Validate the product data
         $isInvalidData = isInvalidProductData($name, $description, $min_servings, $price, $type, $new_image);
 
         if ($isInvalidData) {
@@ -68,7 +73,7 @@ class AdminMenuController
         }
 
         $new_image_url = $old_image_url;
-
+       
         //if there is a new image, we upload it and delete the old one
         if ($new_image) {
             $new_image_url = uploadImage($new_image);

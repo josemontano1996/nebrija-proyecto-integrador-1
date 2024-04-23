@@ -20,7 +20,7 @@
                         <li class="menu-list-item" id="<?= $product['id'] ?>">
                             <header>
                                 <h3><?= ucfirst($product['name']) ?></h3>
-                                <img src=" <?= $product['image_url'] ?>" loading="lazy" alt="guacamole">
+                                <img src=" <?= $product['image_url'] ?>" loading="lazy" alt=<?= $product['image_url'] ?>>
                                 <p><?= ucfirst($product['description']) ?></p>
                             </header>
                             <footer>

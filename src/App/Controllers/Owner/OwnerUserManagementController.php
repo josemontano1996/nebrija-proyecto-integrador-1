@@ -8,8 +8,21 @@ use App\ResponseStatus;
 use App\ServerErrorLog;
 use App\View;
 
+/**
+ * Class OwnerUserManagementController
+ * 
+ * This class handles the user management functionality for the owner role.
+ */
 class OwnerUserManagementController
 {
+    /**
+     * Update the role of a user.
+     * 
+     * This method updates the role of a user based on the provided user ID, email, and role.
+     * It performs various checks and validations before updating the role.
+     * 
+     * @return void
+     */
     public function updateUserRole(): void
     {
         // Get the user ID, email and role from the POST request
@@ -71,7 +84,14 @@ class OwnerUserManagementController
         }
     }
 
-
+    /**
+     * Get the management logs.
+     * 
+     * This method retrieves the management logs for user management operations.
+     * It takes the page number as a parameter and returns the logs in a formatted view.
+     * 
+     * @return string|null The rendered view with the logs, or null if an error occurs.
+     */
     public function getManagementLogs(): ?string
     {
         // Get the page number from the GET request
@@ -95,6 +115,14 @@ class OwnerUserManagementController
         }
     }
 
+    /**
+     * Get the logs by user email.
+     * 
+     * This method retrieves the logs for a specific user based on their email.
+     * It takes the email as a parameter and returns the logs in a formatted view.
+     * 
+     * @return string|null The rendered view with the logs, or null if an error occurs.
+     */
     public function getLogsByUserEmail(): ?string
     {
         // Get the email from the url 

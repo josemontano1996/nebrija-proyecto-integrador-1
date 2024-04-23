@@ -18,7 +18,7 @@ class Product
      * @param string $type The type of the product.
      * @param string|null $image_url The URL of the product's image (optional).
      * @param int|null $min_servings The minimum number of servings (optional, default is 0).
-     * @param int|null $id The ID of the product (optional).
+     * @param string|null $id The ID of the product (optional).
      */
     public function __construct(
         protected string $name,

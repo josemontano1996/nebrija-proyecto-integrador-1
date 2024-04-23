@@ -49,7 +49,7 @@ class ProductModel extends Product
     {
         $productDAO = new ProductDAO();
 
-        $result = $productDAO->updateProduct($this->id = '', $this->name, $this->description, $this->min_servings, $this->price, $this->type, $this->image_url);
+        $result = $productDAO->updateProduct($this->id, $this->name, $this->description, $this->min_servings, $this->price, $this->type, $this->image_url);
 
         return $result;
     }

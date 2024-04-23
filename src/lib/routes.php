@@ -13,6 +13,7 @@ if ($_ENV['ENVIRONMENT'] === 'dev') {
     $router->get('/seed', [App\Seed\SeedController::class, 'seedDatabase']);
 }
 
+//Public routes
 $router->get('/index.php', [App\Controllers\BaseController::class, 'getHomePage']);
 $router->get('/', [App\Controllers\BaseController::class, 'getHomePage']);
 
@@ -50,7 +51,7 @@ $router->get('/admin/product/new', [App\Controllers\Admin\AdminMenuController::c
 $router->post('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'postNewProduct']);
 
 $router->get('/admin/product/update', [App\Controllers\Admin\AdminMenuController::class, 'getUpdateProduct']);
-$router->post('/admin/product/update', [App\Controllers\Admin\AdminMenuController::class, 'postUpdateProduct']);
+$router->post('/admin/product/update', [App\Controllers\Admin\AdminMenuController::class, 'postUpdateProductAjax']);
 $router->delete('/admin/product/delete', [App\Controllers\Admin\AdminMenuController::class, 'deleteProduct']);
 
 //Owner routes

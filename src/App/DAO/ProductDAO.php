@@ -170,7 +170,7 @@ class ProductDAO
 
         // Close the statement
         $statement->close();
-
+      
         return $result;
     }
 
