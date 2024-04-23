@@ -48,11 +48,11 @@ $router->post('/admin/order/status', [App\Controllers\Admin\AdminOrderController
 $router->get('/admin/menu', [App\Controllers\Admin\AdminMenuController::class, 'getMenu']);
 
 $router->get('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'getNewProduct']);
-$router->post('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'postNewProduct']);
+$router->post('/admin/product/new', [App\Controllers\Admin\AdminMenuController::class, 'postNewProductAjax']);
 
 $router->get('/admin/product/update', [App\Controllers\Admin\AdminMenuController::class, 'getUpdateProduct']);
 $router->post('/admin/product/update', [App\Controllers\Admin\AdminMenuController::class, 'postUpdateProductAjax']);
-$router->delete('/admin/product/delete', [App\Controllers\Admin\AdminMenuController::class, 'deleteProduct']);
+$router->delete('/admin/product/delete', [App\Controllers\Admin\AdminMenuController::class, 'deleteProductAjax']);
 
 //Owner routes
 $router->get('/owner/users', [App\Controllers\Owner\OwnerUserController::class, 'getUsers']);

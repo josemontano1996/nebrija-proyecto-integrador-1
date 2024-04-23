@@ -13,8 +13,18 @@ use App\View;
 use App\Models\ProductModel;
 use App\ServerErrorLog;
 
+/**
+ * FILEPATH: /c:/xampp/htdocs/proyecto-integrador/src/App/Controllers/Admin/AdminMenuController.php
+ *
+ * The AdminMenuController class is responsible for handling the admin menu functionality.
+ */
 class AdminMenuController
 {
+    /**
+     * Retrieves the menu and renders the view with the products.
+     *
+     * @return string|null The rendered view with the products, or null if an error occurs.
+     */
     public function getMenu(): ?string
     {
         try {
@@ -29,6 +39,11 @@ class AdminMenuController
         }
     }
 
+    /**
+     * Retrieves the product to be updated and renders the update view.
+     *
+     * @return string|null The rendered update view with the product, or null if an error occurs.
+     */
     public function getUpdateProduct(): ?string
     {
         try {
@@ -51,6 +66,11 @@ class AdminMenuController
         }
     }
 
+    /**
+     * Updates the product data based on the POST request.
+     *
+     * @return void
+     */
     public function postUpdateProductAjax(): void
     {
         // Get the product data from the POST request
@@ -67,59 +87,67 @@ class AdminMenuController
         $isInvalidData = isInvalidProductData($name, $description, $min_servings, $price, $type, $new_image);
 
         if ($isInvalidData) {
-            http_response_code(400);
-            echo json_encode($isInvalidData);
-            exit();
+            // If the data is invalid, return a 400 error
+            ResponseStatus::sendResponseStatus(400, $isInvalidData, null, true);
         }
 
         $new_image_url = $old_image_url;
-       
+
         //if there is a new image, we upload it and delete the old one
         if ($new_image) {
+            //upload the new image and delete old one
             $new_image_url = uploadImage($new_image);
             unlink(ROOT_PATH . $old_image_url);
         }
 
         try {
 
+            // Update the product in the database
             $productInstance = new ProductModel($name, $description, $price, $type, $new_image_url, $min_servings, $id);
-
             $success = $productInstance->update();
 
             if (!$success) {
-                http_response_code(500);
-                echo json_encode("Error while updating the product.");
-                exit();
+                ResponseStatus::sendResponseStatus(500, 'Error while updating the product.', null, true);
             }
 
-            echo json_encode('/admin/menu');
-            exit();
+            ResponseStatus::sendResponseStatus(200, null, '/admin/menu', true);
         } catch (\Exception $e) {
+            // Log the error
+            ServerErrorLog::logError($e);
 
             if (isset($new_image_url)) {
-                unlink(__DIR__ . '/../../..' . $new_image_url);
+                //delete the new image in case of error
+                unlink(ROOT_PATH . $new_image_url);
             }
 
             if ($e->getCode() === 1062) {
-                http_response_code(409);
-                echo json_encode("There is a product with the same name. Please enter a different name.");
-                exit();
+                ResponseStatus::sendResponseStatus(409, 'There is a product with the same name. Please enter a different name.', null, true);
             } else {
-                http_response_code(500);
-                echo json_encode("Something went wrong");
-                exit();
+                ResponseStatus::sendResponseStatus(500, 'Something went wrong', null, true);
             }
         }
     }
 
+    /**
+     * Retrieves the view for adding a new product.
+     *
+     * @return string The rendered view for adding a new product.
+     */
     public function getNewProduct(): string
     {
+        // Render the view for adding a new product
         return (new View('admin/product/new'))->render();
     }
 
-    public function postNewProduct(): void
+    /**
+     * Adds a new product based on the POST request.
+     *
+     * @return void
+     */
+    public function postNewProductAjax(): void
     {
 
+        // Get the product data from the POST request
         $name = trim($_POST['name']);
         $description = trim($_POST['description']);
         $min_servings = $_POST['min_servings'] ? (int) $_POST['min_servings'] : 0;
@@ -127,70 +155,77 @@ class AdminMenuController
         $type = $_POST['type'];
         $image = $_FILES['image'];
 
+        // Validate the product data
         $isInvalidData = isInvalidProductData($name, $description, $min_servings, $price, $type, $image);
 
         if ($isInvalidData) {
-            http_response_code(400);
-            echo json_encode($isInvalidData);
-            exit();
+            // If the data is invalid, return a 400 error
+            ResponseStatus::sendResponseStatus(400, $isInvalidData, null, true);
         }
 
+        // Upload the image
         $image_url = uploadImage($image);
 
         try {
+            // Add the product to the database
             $productInstance = new ProductModel($name, $description, $price, $type, $image_url, $min_servings);
-
             $success = $productInstance->add();
 
             if (!$success) {
-                http_response_code(500);
-                echo json_encode("Error while adding the product.");
-                exit();
+                // If the product was not added, return a 500 error
+                ResponseStatus::sendResponseStatus(500, 'Error while adding the product.', null, true);
             }
 
-            echo json_encode('/admin/menu');
-            exit();
+            ResponseStatus::sendResponseStatus(200, null, '/admin/menu', true);
         } catch (\Exception $e) {
+            // Log the error
+            ServerErrorLog::logError($e);
 
             //deleting the image in case of error
             unlink(ROOT_PATH .  $image_url);
 
             if ($e->getCode() === 1062) {
-                http_response_code(409);
-                echo json_encode("There is a product with the same name. Please enter a different name");
-                exit();
+                // If there is a product with the same name, return a 409 error
+                ResponseStatus::sendResponseStatus(409, 'There is a product with the same name. Please enter a different name.', null, true);
             } else {
-                http_response_code(500);
-                echo json_encode("Something went wrong");
-                exit();
+                // If there is an error, return a 500 error
+                ResponseStatus::sendResponseStatus(500, 'Something went wrong', null, true);
             }
         }
     }
 
-    public function deleteProduct(): void
+    /**
+     * Deletes a product based on the GET request.
+     *
+     * @return void
+     */
+    public function deleteProductAjax(): void
     {
         try {
+            // Get the product id and image url from the GET request
             $product_id = $_GET['productId'];
 
             //decoding the url parameter for image url
             $image_url = urldecode($_GET['imageUrl']);
 
+            // Delete the product from the database
             $isDeleted = ProductModel::delete($product_id);
 
             if ($isDeleted) {
+                // If the product was deleted, delete the image
                 unlink(ROOT_PATH . $image_url);
             } else {
-                echo json_encode("Error while deleting.");
-                exit();
+                // If the product was not deleted, return a 500 error
+                ResponseStatus::sendResponseStatus(500, 'Error while deleting the product.', null, true);
             }
 
-
-            echo json_encode("Success deleting the product.");
-            exit();
+            ResponseStatus::sendResponseStatus(200, 'Success deleting the product.', null, true);
         } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode("Something went wrong");
-            exit();
+            // Log the error
+            ServerErrorLog::logError($e);
+
+            // If there is an error, return a 500 error
+            ResponseStatus::sendResponseStatus(500, 'Something went wrong', null, true);
         }
     }
 }

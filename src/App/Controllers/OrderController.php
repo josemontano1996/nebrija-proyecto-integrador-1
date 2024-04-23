@@ -189,12 +189,12 @@ class OrderController
 
         //Validate inputs
         if ($delivery_date < date('Y-m-d H:i:s')) {
-            ResponseStatus::sendResponseStatus(400, 'Invalid date.', '/cart', true);
+            ResponseStatus::sendResponseStatus(400, 'Invalid date.', null, true);
         }
 
         if (!$order_data) {
             // If there is no order data, return a 400 error
-            ResponseStatus::sendResponseStatus(400, 'No order data.', '/cart', true);
+            ResponseStatus::sendResponseStatus(400, 'No order data.', null, true);
         }
 
         // Check if the delivery data is invalid
@@ -202,7 +202,7 @@ class OrderController
 
         if ($isInvalidData) {
             // If the delivery data is invalid, return a 400 error
-            ResponseStatus::sendResponseStatus(400, $isInvalidData, '/cart', true);
+            ResponseStatus::sendResponseStatus(400, $isInvalidData, null, true);
         }
 
         try {
@@ -212,7 +212,7 @@ class OrderController
 
             if (!$addressId) {
                 // If the address could not be saved, return a 500 error
-                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
+                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', null, true);
             }
 
             // Save the order data
@@ -222,7 +222,7 @@ class OrderController
             if (!$success) {
                 // If the order could not be saved, return a 500 error and delete the stored address
                 $addressModel->deleteAddressData($addressId);
-                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
+                ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', null, true);
             }
 
             // Clear the cart cookie
@@ -232,7 +232,7 @@ class OrderController
         } catch (\Exception $e) {
             // Log the error and return a 500 error
             ServerErrorLog::logError($e);
-            ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', '/cart', true);
+            ResponseStatus::sendResponseStatus(500, 'An error ocurred. Try again later.', null, true);
         }
     }
 }
