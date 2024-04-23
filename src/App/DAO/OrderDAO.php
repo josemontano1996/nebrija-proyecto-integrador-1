@@ -42,20 +42,18 @@ class OrderDAO
         $user_id = $db->real_escape_string($user_id);
         $user_name = $db->real_escape_string($user_name);
         $address_id = $db->real_escape_string($address_id);
-        $total_price = $db->real_escape_string($total_price);
         $status = $db->real_escape_string($status);
         $delivery_date = $db->real_escape_string($delivery_date);
 
         $sql = "INSERT INTO orders (id,  user_id, user_name, address_id, products, total_price, status, delivery_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         $stmt = $db->prepare($sql);
-
-        $stmt->bind_param('sssssiss', $order_id, $user_id, $user_name, $address_id, $jsonProducts, $total_price, $status, $delivery_date);
-
+        $stmt->bind_param('sssssdss', $order_id, $user_id, $user_name, $address_id, $jsonProducts, $total_price, $status, $delivery_date);
+        
         $result = $stmt->execute();
-
+        
         $stmt->close();
-
+      
         return $result;
     }
 
@@ -187,7 +185,7 @@ class OrderDAO
 
         $userId = $db->real_escape_string($userId);
 
-        $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? ORDER BY created_at";
+        $sql = "SELECT orders.*, addresses.street, addresses.city, addresses.postal FROM orders INNER JOIN addresses ON orders.address_id = addresses.id WHERE user_id = ? ORDER BY created_at DESC";
 
         if (isset($page)) {
             $start = 0;

@@ -95,7 +95,7 @@ class CartDataInitializer
                     if ($product->getMinServings() > $cookieItem['quantity']) {
                         $cookieItem['quantity'] = $product->getMinServings();
                     }
-                    
+
                     $products[] = new CartProductData($productId, $product->getName(), $cookieItem['quantity'], $product->getPrice(), $product->getType(), $product->getImageUrl(), $product->getDescription(), $product->getMinServings());
                     $found = true;
                 }
@@ -117,7 +117,7 @@ class CartDataInitializer
         foreach ($this->products as $product) {
             $totalPrice += $product->getPrice() * $product->getQuantity();
         }
-
+    
         $this->totalPrice = (float) number_format($totalPrice, 2, '.', '');
     }
 

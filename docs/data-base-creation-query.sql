@@ -31,7 +31,7 @@ CREATE TABLE products (
 CREATE TABLE orders (
   id CHAR(36) PRIMARY KEY,
   user_id CHAR(36) NOT NULL,
-   user_name VARCHAR(50) NOT NULL,
+  user_name VARCHAR(50) NOT NULL,
   address_id CHAR(36) NOT NULL,
   status VARCHAR(50) NOT NULL,
   products JSON NOT NULL,

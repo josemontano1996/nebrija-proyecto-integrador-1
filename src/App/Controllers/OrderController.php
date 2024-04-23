@@ -186,6 +186,7 @@ class OrderController
         // Get the cart data from the cookie
         $order_data = CartCookie::getCartFromCookie();
 
+
         //Validate inputs
         if ($delivery_date < date('Y-m-d H:i:s')) {
             ResponseStatus::sendResponseStatus(400, 'Invalid date.', '/cart', true);

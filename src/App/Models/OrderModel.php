@@ -52,7 +52,7 @@ class OrderModel
     public function saveOrderData(): bool
     {
         $orderDAO = new OrderDAO();
-
+        
         $result = $orderDAO->saveOrderData($this->user_id, $this->user_name, $this->address_id, $this->products, $this->total_price, $this->status, $this->delivery_date);
 
         return $result;
@@ -61,9 +61,9 @@ class OrderModel
     static public function getOrderById(string $orderId): ?Order
     {
         $orderDAO = new OrderDAO();
-        
-        $order = $orderDAO->getOrderById( $orderId);
-        
+
+        $order = $orderDAO->getOrderById($orderId);
+
         return $order;
     }
     /**
