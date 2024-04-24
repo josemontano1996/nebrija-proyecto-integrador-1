@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/src/front/css/owner/users/user.css">
 
 
-<title>Menu page</title>
+<?php echo generateSEOTags('User information', 'User information'); ?>
 </head>
 
 <body>

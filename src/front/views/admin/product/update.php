@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/src/front/css/admin/update-product.css">
 <script src="/src/front/scripts/admin/update-product.js" defer></script>
 
-<title>Chef Manuelle Webpage</title>
+<?php echo generateSEOTags('Update Product', 'Update Product'); ?>
 </head>
 
 <body>

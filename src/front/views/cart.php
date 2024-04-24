@@ -6,7 +6,7 @@
 <script type="module" src="/src/front/scripts/cart/remove-one.js" defer></script>
 <script type="module" src="/src/front/scripts/cart/create-order.js" defer></script>
 
-<title>Menu page</title>
+<?php echo generateSEOTags('Cart', 'This is the cart page, here you can find all the products that you have added to your cart.'); ?>
 </head>
 
 <body>

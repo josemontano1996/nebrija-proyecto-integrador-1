@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/src/front/css/admin/admin-menu.css">
 <script defer src="/src/front/scripts/admin/delete-product.js"></script>
 
-<title>Manage Menu</title>
+<?php echo generateSEOTags('Admin Menu', 'Admin Menu'); ?>
 </head>
 
 <body>

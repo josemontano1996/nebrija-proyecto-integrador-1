@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/src/front/css/home.css">
 <script type="module" src="/src/front/scripts/home/buttons-scroll.js" defer></script>
 
-<title>Chef Manuelle Webpage</title>
+<?php echo generateSEOTags('Testing page', 'Testing page just for test purposes'); ?>
 </head>
 
 <body>

@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/src/front/css/user/account.css">
 <script src="/src/front/scripts/home/buttons-scroll.js" defer></script>
 
-<title>Login page</title>
+<?php echo generateSEOTags('Account page', 'Account page'); ?>
 </head>
 
 <body>

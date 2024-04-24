@@ -2,7 +2,8 @@
 
 <link rel="stylesheet" href="/src/front/css/login.css">
 <script src="/src/front/scripts/auth/form-displays.js" defer></script>
-<title>Login page</title>
+
+<?php echo generateSEOTags('Credentials page', 'Credentials page'); ?>
 </head>
 
 <body>

@@ -2,7 +2,7 @@
 
 <script src="/src/front/scripts/admin/post-new-product.js" defer></script>
 
-<title>Chef Manuelle Webpage</title>
+<?php echo generateSEOTags('New Product', 'New Product'); ?>
 </head>
 
 <body>

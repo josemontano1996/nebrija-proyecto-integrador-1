@@ -3,12 +3,13 @@
 <link rel="stylesheet" href="/src/front/css/home.css">
 <script type="module" src="/src/front/scripts/home/buttons-scroll.js" defer></script>
 
-<title>Chef Manuelle Webpage</title>
+<?php echo generateSEOTags('Chef Manuelle Webpage', 'This is the home page of Chef Manuelle webpage, here you can find all related services to him.'); ?>
+
 </head>
 
 <body>
     <?php require_once __DIR__ . '/includes/shared-components.php'; ?>
-    
+
     <?php
     $midHeader =
         '<li class="italic"><a id="chef-scroll">The Chef</a></li>

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/src/front/css/owner/logs/allLogs.css">
 
 
-<title>Menu page</title>
+<?php echo generateSEOTags('User logs page', 'User logs page'); ?>
 </head>
 
 <body>

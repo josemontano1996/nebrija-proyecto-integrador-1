@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../includes/shared-head.php'; ?>
-<title>Page not found</title>
+
+<?php echo generateSEOTags('Page not found', 'Page not found'); ?>
 </head>
 
 <body>

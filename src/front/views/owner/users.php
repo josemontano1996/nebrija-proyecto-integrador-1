@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/src/front/css/owner/users/allUsers.css">
 
 
-<title>Menu page</title>
+<?php echo generateSEOTags('User management', 'User management'); ?>
 </head>
 
 <body>

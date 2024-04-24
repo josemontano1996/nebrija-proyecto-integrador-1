@@ -5,18 +5,18 @@
 <script type="module" src="/src/front/scripts/menu/button-scroll-menu-page.js" defer></script>
 <script type="module" src="/src/front/scripts/menu/x-draggable-container.js" defer></script>
 
-<title>Menu page</title>
+<?php echo generateSEOTags('The Menu', 'This is the menu page, here you can find all the delicious dishes that our chef prepares for you.'); ?>
 </head>
 
 <body>
     <?php require_once __DIR__ . '/includes/shared-components.php'; ?>
-    
+
     <?php
     $midHeader = '<li class="italic"><a id="menu-scroll">The Menu</a></li>';
     echo createHeader($midHeader);
     ?>
     <main>
-        <header id='menu-page-header'>
+        <div id='menu-page-header'>
             <div>
                 <div id='text-content'>
                     <h1>You are what you eat, so</h1>
@@ -26,7 +26,7 @@
                     <img src="/src/front/assets/imgs/menu-header.webp" alt="header image">
                 </div>
             </div>
-        </header>
+        </div>
         <section id='advantages-section'>
             <h2>Satisfaction Guaranteed</h2>
             <ul>

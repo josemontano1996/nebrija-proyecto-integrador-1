@@ -2,7 +2,7 @@
 <?php require_once ROOT_PATH . '/src/const/consts.php'; ?>
 <link rel="stylesheet" href="/src/front/css/admin/order/adminOrders.css">
 
-<title>Orders page</title>
+<?php echo generateSEOTags('Admin Orders', 'Admin Orders'); ?>
 </head>
 
 <body>
