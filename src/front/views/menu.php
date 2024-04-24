@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <?php require_once __DIR__ . '/includes/shared-components.php'; ?>
+    
     <?php
     $midHeader = '<li class="italic"><a id="menu-scroll">The Menu</a></li>';
     echo createHeader($midHeader);

@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    <?php require_once __DIR__ . '/../../includes/shared-components.php'; ?>
     <?php
     $midHeader =  "<a href='/user/orders'" . (!isset($_GET['status']) ? "class='italic bold underline'" : "") . ">All</a>";
 

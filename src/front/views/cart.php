@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <?php require_once __DIR__ . '/includes/shared-components.php'; ?>
     <?php
     echo createHeader();
     ?>

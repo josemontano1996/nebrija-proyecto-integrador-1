@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <?php require_once __DIR__ . '/../../includes/shared-components.php'; ?>
     <?php
     $midHeader = '<li class="btn-primary"><a href="/admin/product/new">New Dish</a></li>';
     echo createHeader($midHeader);

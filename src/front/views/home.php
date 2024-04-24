@@ -7,6 +7,8 @@
 </head>
 
 <body>
+    <?php require_once __DIR__ . '/includes/shared-components.php'; ?>
+    
     <?php
     $midHeader =
         '<li class="italic"><a id="chef-scroll">The Chef</a></li>
