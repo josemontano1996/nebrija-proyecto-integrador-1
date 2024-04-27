@@ -23,7 +23,7 @@ class Router
      * @param callable|array $action The action to be executed when the route is matched.
      * @return $this
      */
-    public function register(string $requestMethod, string $route, callable|array $action)
+    public function register(string $requestMethod, string $route, callable|array $action): self
     {
         // Store the route and action in the $routes array
         $this->routes[$requestMethod][$route] = $action;
@@ -37,7 +37,7 @@ class Router
      * @param callable|array $action The action to be executed when the route is matched.
      * @return $this
      */
-    public function get(string $route, callable|array $action)
+    public function get(string $route, callable|array $action): self
     {
         return $this->register('get', $route, $action);
     }
@@ -49,7 +49,7 @@ class Router
      * @param callable|array $action The action to be executed when the route is matched.
      * @return $this
      */
-    public function post(string $route, callable|array $action)
+    public function post(string $route, callable|array $action): self
     {
         return $this->register('post', $route, $action);
     }
@@ -61,7 +61,7 @@ class Router
      * @param callable|array $action The action to be executed when the route is matched.
      * @return $this
      */
-    public function put(string $route, callable|array $action)
+    public function put(string $route, callable|array $action):self
     {
         return $this->register('put', $route, $action);
     }
@@ -73,7 +73,7 @@ class Router
      * @param callable|array $action The action to be executed when the route is matched.
      * @return $this
      */
-    public function delete(string $route, callable|array $action)
+    public function delete(string $route, callable|array $action):self
     {
         return $this->register('delete', $route, $action);
     }

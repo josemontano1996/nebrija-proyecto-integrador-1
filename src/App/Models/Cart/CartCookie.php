@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Cart;
 
 use App\Models\Classes\CartCookieItem;
+use App\Models\Cart\CartDataInitializer;
 
 /**
  * Class CartCookie

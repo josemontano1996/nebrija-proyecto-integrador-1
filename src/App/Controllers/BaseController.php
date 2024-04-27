@@ -29,7 +29,7 @@ class BaseController
     /**
      * Retrieves the menu view.
      *
-     * @return string The rendered menu view.
+     * @return string |null The rendered menu view.
      */
     public function getMenu(): ?string
     {

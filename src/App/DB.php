@@ -15,7 +15,7 @@ use App\Exceptions\ErrorDbException;
 class DB
 {
     private static $instance;
-    private $db;
+    private mysqli $db;
 
     /**
      * DB constructor.

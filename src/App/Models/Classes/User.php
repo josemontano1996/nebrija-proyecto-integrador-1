@@ -3,7 +3,7 @@
 namespace App\Models\Classes;
 
 
-use App\Models\Classes\DeliveryData;
+
 
 /**
  * The User class represents a user in the system.

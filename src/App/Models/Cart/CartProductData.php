@@ -13,8 +13,8 @@ use App\Models\Classes\Product;
  */
 class CartProductData extends Product
 {
-    protected float $subtotal;
-    protected int $quantity;
+    private float $subtotal;
+    private int $quantity;
 
     /**
      * CartProductData constructor.
@@ -36,7 +36,7 @@ class CartProductData extends Product
         string $type,
         string $image_url,
         string $description,
-        int $min_servings = 0,
+        ?int $min_servings = 0,
     ) {
         parent::__construct($name, $description, $price, $type, $image_url, $min_servings, $id);
         $this->quantity = $quantity;

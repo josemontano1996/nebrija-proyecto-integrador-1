@@ -3,9 +3,7 @@
 namespace App\DAO;
 
 use App\DB;
-use App\Models\Cart\CartProductData;
 use App\Models\Classes\Order;
-use App\Models\Classes\AddressData;
 use App\Models\OrderModel;
 use mysqli;
 use Ramsey\Uuid\Uuid;

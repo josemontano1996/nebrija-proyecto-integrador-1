@@ -20,14 +20,14 @@ class View
      *
      * @var string
      */
-    protected string $view;
+    private string $view;
 
     /**
      * The parameters to be passed to the view.
      *
      * @var array
      */
-    protected array | CustomClass $params;
+    private array | CustomClass $params;
 
     /**
      * Create a new View instance.

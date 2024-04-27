@@ -131,7 +131,7 @@ class UserModel extends User
         return $users;
     }
 
-    static public function sortUsersAlphabeticallyByEmail($users): array
+    static public function sortUsersAlphabeticallyByEmail( array $users): array
     {
         usort($users, function ($a, $b) {
             return $a->getEmail() <=> $b->getEmail();

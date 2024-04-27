@@ -18,6 +18,7 @@ class CartDataInitializer
 
     /**
      * @var CartProductData[] $products An array of CartProductData objects representing the products in the cart.
+     * @var float $totalPrice The total price of all products in the cart.
      */
     private array $products = [];
     private float $totalPrice = 0;
@@ -92,6 +93,7 @@ class CartDataInitializer
 
                 if ($cookieId === $productId) {
 
+                    // If the quantity of the product in the cart is less than the minimum servings, set it to the minimum servings
                     if ($product->getMinServings() > $cookieItem['quantity']) {
                         $cookieItem['quantity'] = $product->getMinServings();
                     }
@@ -141,6 +143,11 @@ class CartDataInitializer
         return $this->totalPrice;
     }
 
+    /**
+     * Generates an array of data objects representing the products in the cart.
+     *
+     * @return array The array of data objects representing the products in the cart.
+     */
     public function generateProductsDataObject(): array
     {
         $cartData = [];

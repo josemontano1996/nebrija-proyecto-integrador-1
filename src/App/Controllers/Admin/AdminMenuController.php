@@ -14,7 +14,6 @@ use App\Models\ProductModel;
 use App\ServerErrorLog;
 
 /**
- * FILEPATH: /c:/xampp/htdocs/proyecto-integrador/src/App/Controllers/Admin/AdminMenuController.php
  *
  * The AdminMenuController class is responsible for handling the admin menu functionality.
  */

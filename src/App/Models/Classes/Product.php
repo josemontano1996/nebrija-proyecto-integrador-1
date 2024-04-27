@@ -27,7 +27,7 @@ class Product extends CustomClass
         protected string $description,
         protected float $price,
         protected string $type,
-        protected ?string $image_url,
+        protected ?string $image_url= null,
         protected ?int $min_servings = 0,
         protected ?string $id = null
     ) {

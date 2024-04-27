@@ -105,7 +105,7 @@ class AuthController
     public function postRegister(): void
     {
         // Checking if user is already logged in
-        if (isset($_SESSION['user'])) {
+        if (AuthSession::isLoggedIn()) {
             ResponseStatus::sendResponseStatus(403, 'You are already logged in', '/login');
         }
 

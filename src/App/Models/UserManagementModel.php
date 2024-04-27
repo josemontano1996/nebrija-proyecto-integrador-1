@@ -53,10 +53,10 @@ class UserManagementModel
      * Retrieves the management logs.
      *
      * @param int|null $page The page number (optional).
-     * @param int $limit The maximum number of logs to retrieve (default: 5).
+     * @param int|null  $limit The maximum number of logs to retrieve (default: 5).
      * @return array|null An array of management logs, or null if not found.
      */
-    static public function getManagementLogs(int $page = null, int $limit = 5): ?array
+    static public function getManagementLogs(?int $page = null, ?int $limit = 5): ?array
     {
         $userManagementDAO = new UserManagementDAO();
 

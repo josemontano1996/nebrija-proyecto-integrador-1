@@ -14,7 +14,7 @@ class AddressData
      * @var string $street The street address for the delivery.
      * @var string $city The city for the delivery.
      * @var string $postal The postal code for the delivery.
-     * @var string $phone The phone number for the delivery.
+     * @var string | null $address_id The address ID.
      */
     public function __construct(protected string $street, protected string $city, protected string $postal, protected ?string $address_id = null)
     {

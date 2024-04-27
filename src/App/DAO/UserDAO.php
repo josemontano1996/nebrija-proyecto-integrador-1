@@ -182,7 +182,7 @@ class UserDAO
      * @param string|null $password The new password of the user, or null to keep the existing password.
      * @return bool True if the user was successfully updated, false otherwise.
      */
-    public function updateUser(string $user_id, string $name, string $email, ?string $password): bool
+    public function updateUser(string $user_id, string $name, string $email, ?string $password = null): bool
     {
 
         $db = $this->db;

@@ -33,7 +33,7 @@ class ProductModel extends Product
         string $description,
         float $price,
         string $type,
-        ?string $image_url,
+        ?string $image_url = null,
         ?int $min_servings = 0,
         ?string $id = null
     ) {

@@ -27,7 +27,7 @@ class OrderController
      *
      * @return void
      */
-    public function cancelPendingOrder()
+    public function cancelPendingOrder(): void
     {
         // Get the user ID from the session
         $userId = AuthSession::getUserId();
