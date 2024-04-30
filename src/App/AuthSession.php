@@ -75,6 +75,11 @@ class AuthSession
         return $_SESSION['user']['role'] ?? null;
     }
 
+    static public function isUserRole(string $role): bool
+    {
+        return $_SESSION['user']['role'] === $role;
+    }
+
     /**
      * Destroy the session.
      */

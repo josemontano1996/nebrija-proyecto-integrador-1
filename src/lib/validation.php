@@ -9,13 +9,9 @@ declare(strict_types=1);
  * @param int|null $minLength The minimum length required for the string (default: 0).
  * @return bool Returns true if the string is valid, false otherwise.
  */
-function isValidString(string $string, ?int $minLength = 0): bool
+function isValidString(string $string, ?int $minLength = 1): bool
 {
-    if (is_string($string) && strlen($string) >= $minLength) {
-        return true;
-    } else {
-        return false;
-    }
+    return strlen($string) >= $minLength;
 }
 
 /**
@@ -26,11 +22,7 @@ function isValidString(string $string, ?int $minLength = 0): bool
  */
 function isValidEmail(string $email): bool
 {
-    if (isset($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return true;
-    } else {
-        return false;
-    }
+    return isset($email) && filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 /**
@@ -43,11 +35,7 @@ function isValidImage(array $file): bool
 {
     $supportedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
-    if (isset($file) && $file['error'] === 0 && in_array($file['type'], $supportedTypes)) {
-        return true;
-    } else {
-        return false;
-    }
+    return isset($file) && $file['error'] === 0 && in_array($file['type'], $supportedTypes);
 }
 
 /**
@@ -59,11 +47,7 @@ function isValidImage(array $file): bool
  */
 function isValidInteger(int $integer, ?int $minValue = 0): bool
 {
-    if (isset($integer) && $integer >= $minValue) {
-        return true;
-    } else {
-        return false;
-    }
+    return isset($integer) && $integer >= $minValue;
 }
 
 /**
@@ -75,9 +59,5 @@ function isValidInteger(int $integer, ?int $minValue = 0): bool
  */
 function isValidFloat(float $float, ?float $minValue = 0.0): bool
 {
-    if (isset($float) && filter_var($float, FILTER_VALIDATE_FLOAT) && ($float >= $minValue)) {
-        return true;
-    } else {
-        return false;
-    }
+    return isset($float) && filter_var($float, FILTER_VALIDATE_FLOAT) && ($float >= $minValue);
 }

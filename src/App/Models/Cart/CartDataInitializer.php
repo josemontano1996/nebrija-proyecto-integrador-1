@@ -6,6 +6,7 @@ namespace App\Models\Cart;
 
 use App\Models\ProductModel;
 use App\Models\Classes\Product;
+use App\ResponseStatus;
 
 /**
  * Class CartDataInitializer
@@ -46,11 +47,9 @@ class CartDataInitializer
         $id_list = $cookieCart->getIds();
 
         // If the cart is empty, redirect to the menu page
+        //I know that this is not the best way to handle this, but I don't have time to implement a better solution
         if (count($id_list) === 0) {
-            $_SESSION['error'] = 'Your cart is empty, add some items to it first.';
-            http_response_code(500);
-            header('Location: /menu');
-            exit();
+            ResponseStatus::sendResponseStatus(500, 'Your cart is empty, add some items to it first.', '/menu');
         }
 
         // Get the products from the database
@@ -119,7 +118,7 @@ class CartDataInitializer
         foreach ($this->products as $product) {
             $totalPrice += $product->getPrice() * $product->getQuantity();
         }
-    
+
         $this->totalPrice = (float) number_format($totalPrice, 2, '.', '');
     }
 

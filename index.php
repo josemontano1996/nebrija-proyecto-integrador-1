@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/lib/authentication.php';
 
 //I am using the dotenv package to load the environment variables
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -15,14 +14,15 @@ session_start();
 
 
 use App\View;
+use App\AuthMiddleware;
 
 define('ROOT_PATH', __DIR__);
 define('VIEW_PATH', __DIR__ . '/src/front/views');
 define('STORAGE_PATH', __DIR__ . '/src/front/assets/storage');
 
 try {
-    //Requiring the router file
-    checkAuth();
+
+    AuthMiddleware::checkAuth();
 
     require_once __DIR__ . '/src/lib/routes.php';
 } catch (App\Exceptions\RouteNotFoundException | App\Exceptions\ViewNotFoundException $e) {
