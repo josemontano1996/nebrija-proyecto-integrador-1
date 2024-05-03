@@ -1,4 +1,4 @@
-const deleteButtons = document.querySelectorAll('#delete-button');
+const deleteButtons = document.querySelectorAll('.delete-button');
 
 for (const deleteButton of deleteButtons) {
   deleteButton.addEventListener('click', async (e) => {

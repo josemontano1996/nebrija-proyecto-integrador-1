@@ -17,8 +17,8 @@ class ResponseStatus
      */
     static public function sendResponseStatus(int $status_code, ?string $message = null, ?string $redirect_url = null, ?bool $is_ajax_response = false): void
     {
-        // Set the response code
         if ($is_ajax_response) {
+            // Set the response code
             http_response_code($status_code);
             //Set the response content type
             if ($redirect_url) {

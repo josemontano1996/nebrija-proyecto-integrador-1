@@ -18,7 +18,7 @@ if (form) {
     }
 
     const responseData = await response.json();
-    console.log(responseData);
+   
     if (!response.ok) {
       alert(responseData || 'Something went wrong, please try again later');
       return;

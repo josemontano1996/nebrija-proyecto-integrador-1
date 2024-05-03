@@ -15,7 +15,7 @@ function createHeader(?string $midHeader = null, ?string $rightHeader = null)
     return <<<HTML
      <header id="header">
         <div>
-            <h1><a href="/">IB</a></h1>
+            <h1><a href="/">CM</a></h1>
         </div>
         <nav>
             <ul id="mid-header">

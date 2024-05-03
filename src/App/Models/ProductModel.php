@@ -91,11 +91,13 @@ class ProductModel extends Product
      */
     static public function getAllByType(): array
     {
+        // Get all products from the database
         $productDAO = new ProductDAO();
         $products = $productDAO->getAllProducts();
 
         $sortedByType = [];
 
+        // Sort products by type and store them in array
         foreach (DISHES_TYPES as $type) {
             $typeProducts = array_filter($products, fn ($product) => $product->getType() === $type);
             $sortedByType[$type] = $typeProducts;

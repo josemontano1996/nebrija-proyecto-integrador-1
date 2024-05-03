@@ -32,7 +32,7 @@
                                 <?php endif; ?>
                                 <div class="action-buttons">
                                     <a href="/admin/product/update?productId=<?= $product->getId() ?>" class="btn-secondary">Edit</a>
-                                    <button id="delete-button" data-productid="<?= $product->getId() ?>" data-imageurl="<?= $product->getImageUrl() ?>" class="btn-primary">Delete</button>
+                                    <button class="delete-button btn-primary" data-productid="<?= $product->getId() ?>" data-imageurl="<?= $product->getImageUrl() ?>" >Delete</button>
                                 </div>
                             </footer>
                         </li>
