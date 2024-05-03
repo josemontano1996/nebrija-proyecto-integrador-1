@@ -54,11 +54,9 @@ class AddressDAO
 
         $statement->close();
 
-        if ($result) {
-            return $id;
-        } else {
-            return null;
-        }
+        $address_id = $result ? $id : null;
+
+        return $address_id;
     }
 
     /**
