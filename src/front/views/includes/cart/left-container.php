@@ -1,7 +1,7 @@
  <ul class="cart-container">
      <?php foreach ($params['products'] as $cartItem) : ?>
          <li class="cart-item-li">
-             <div>
+             <div class="img-container">
                  <img src="<?= $cartItem->getImageUrl() ?>" alt="<?= $cartItem->getName() ?>">
              </div>
 
