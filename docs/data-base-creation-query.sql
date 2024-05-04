@@ -1,5 +1,5 @@
-CREATE DATABASE example;
-USE example;
+CREATE DATABASE proyecto_integrador_1;
+USE proyecto_integrador_1;
 
 -- Create tables without foreign key constraints
 
