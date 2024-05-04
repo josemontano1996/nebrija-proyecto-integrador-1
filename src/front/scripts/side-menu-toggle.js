@@ -1,7 +1,9 @@
 const hamburgerButton = document.getElementById('hamburger-button');
 const sideMenu = document.getElementById('side-menu');
 
-function toggleSideMenu() {
+function toggleSideMenu(event) {
+
+  event.stopPropagation();
   sideMenu.classList.toggle('hidden');
 }
 
@@ -11,6 +13,7 @@ function closeSideMenu(event) {
     !event.target.matches('#hamburger-button') &&
     !sideMenu.classList.contains('hidden')
   ) {
+
     sideMenu.classList.add('hidden');
   }
 }
