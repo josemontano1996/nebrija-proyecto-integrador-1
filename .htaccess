@@ -1,9 +1,13 @@
-<FilesMatch "\.(htaccess|htpasswd|ini|phps|fla|psd|log|sh|json)$">
-Order Allow,Deny
-Deny from all
-</FilesMatch>
 
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteRule ^.* index.php
+    RewriteEngine On
+
+    # Exclude specific directories from rewriting
+    RewriteRule ^(src/front/assets|css|scripts)/ - [L]
+
+    # Rewrite all other URLs to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
 </IfModule>
+
