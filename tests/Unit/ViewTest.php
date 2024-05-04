@@ -8,10 +8,17 @@ use App\View;
 use App\Exceptions\ViewNotFoundException;
 use PHPUnit\Framework\TestCase;
 
-define('VIEW_PATH', __DIR__ . '/../../public/views');
+define('VIEW_PATH', __DIR__ . '/../../src/front/views');
+
+define('ROOT_PATH', __DIR__ . '/../../');
 
 class ViewTest extends TestCase
 {
+    /**
+     * Test that a view can be rendered.
+     *
+     * @return void
+     */
     public function test_it_renders_view(): void
     {
         // Given a view instance
@@ -24,6 +31,11 @@ class ViewTest extends TestCase
         $this->assertIsString($output);
     }
 
+    /**
+     * Test that an exception is thrown if the view is not found.
+     *
+     * @return void
+     */
     public function test_it_throws_exception_if_view_not_found(): void
     {
         // Given a view instance with a non-existent view file
@@ -36,12 +48,20 @@ class ViewTest extends TestCase
         $view->render();
     }
 
+    /**
+     * Test that parameters are accessible in the view.
+     *
+     * @return void
+     */
     public function test_params_is_accestible_in_view(): void
     {
+        // Given a view instance with parameters
         $view = new View('testing', ['Jane Doe']);
 
+        // When we render the view
         $renderedView = $view->render();
 
+        // Then the parameters should be accessible in the view
         $this->assertStringContainsString('Jane Doe', $renderedView);
     }
 }
