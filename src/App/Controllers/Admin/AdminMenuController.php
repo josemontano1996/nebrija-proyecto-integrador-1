@@ -76,7 +76,7 @@ class AdminMenuController
         $id =  $_POST['id'];
         $name = trim($_POST['name']);
         $description = trim($_POST['description']);
-        (int)  $min_servings = $_POST['min_servings'] ?  $_POST['min_servings'] : 0;
+        (int)  $min_servings = $_POST['min_servings'] ?  (int) $_POST['min_servings'] : 0;
         $price = (float) $_POST['price'];
         $type = $_POST['type'];
         $old_image_url = $_POST['old_image_url'];

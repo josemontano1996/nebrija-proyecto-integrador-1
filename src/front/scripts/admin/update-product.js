@@ -4,7 +4,7 @@ updateProduct = async (event) => {
   event.preventDefault();
 
   const formData = new FormData(form);
-
+  
   let response;
   try {
     response = await fetch('/admin/product/update', {
