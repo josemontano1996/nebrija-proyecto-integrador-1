@@ -58,9 +58,6 @@ class UserModel extends User
         $userDAO = new UserDAO();
         $userData = $userDAO->getUserByEmail($this->email);
 
-        if (!$userData) {
-            return null;
-        }
 
         // Initialize the user data to null
         $user = null;
