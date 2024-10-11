@@ -6,8 +6,6 @@ This demo will only be available during the period around the examination period
 
 You can find the project full documentation in the `/docs/documentation.pdf`.
 
-You can find the demo here: [Webpage](http://161.22.40.113/)
-
 
 ## Technologies used
 
